@@ -114,14 +114,16 @@
             line-height: 1;
             letter-spacing: -1px;
         }
-
-        .clock-date {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-top: 4px;
-        }
-
-        /* === HAMBURGER BUTTON === */
+                .user-help-text {
+                    display: block;
+                    color: var(--text-secondary);
+                    font-size: 0.68rem;
+                    margin-top: 1px;
+                    font-style: italic;
+                    text-align: center;
+                    line-height: 1.1;
+                       margin-left: 140px; /* Décale le texte d'aide un peu moins vers la droite */
+                }
         .hamburger-btn {
             background: transparent;
             border: none;
@@ -158,6 +160,10 @@
         .greeting-text .user-name {
             color: var(--accent-color);
             font-weight: 400;
+        }
+
+        .greeting-text .user-placeholder {
+            cursor: pointer;
         }
 
         /* === SEARCH WRAPPER === */
@@ -211,35 +217,35 @@
 
         /* Couleurs pour l'icône sélectionnée */
         .engine-selector[data-engine="google"] .engine-icon {
-            color: #4285F4;
+            /* color: #4285F4; */
         }
 
         .engine-selector[data-engine="bing"] .engine-icon {
-            color: #008373;
+            /* color: #008373; */
         }
 
         .engine-selector[data-engine="duckduckgo"] .engine-icon {
-            color: #DE5833;
+            /* color: #DE5833; */
         }
 
         .engine-selector[data-engine="yahoo"] .engine-icon {
-            color: #7B0099;
+            /* color: #7B0099; */
         }
 
         .engine-selector[data-engine="brave"] .engine-icon {
-            color: #FB542B;
+            /* color: #FB542B; */
         }
 
         .engine-selector[data-engine="ecosia"] .engine-icon {
-            color: #69B830;
+            /* color: #69B830; */
         }
 
         .engine-selector[data-engine="qwant"] .engine-icon {
-            color: #5A9CFE;
+            /* color: #5A9CFE; */
         }
 
         .engine-selector[data-engine="yandex"] .engine-icon {
-            color: #FFCC00;
+            /* color: #FFCC00; */
         }
 
         .engine-name {
@@ -292,35 +298,35 @@
 
         /* Couleurs d'identification des moteurs de recherche */
         .engine-option[data-engine="google"] i {
-            color: #4285F4;
+            /* color: #4285F4; */
         }
 
         .engine-option[data-engine="bing"] i {
-            color: #008373;
+            /* color: #008373; */
         }
 
         .engine-option[data-engine="duckduckgo"] i {
-            color: #DE5833;
+            /* color: #DE5833; */
         }
 
         .engine-option[data-engine="yahoo"] i {
-            color: #7B0099;
+            /* color: #7B0099; */
         }
 
         .engine-option[data-engine="brave"] i {
-            color: #FB542B;
+            /* color: #FB542B; */
         }
 
         .engine-option[data-engine="ecosia"] i {
-            color: #69B830;
+            /* color: #69B830; */
         }
 
         .engine-option[data-engine="qwant"] i {
-            color: #5A9CFE;
+            /* color: #5A9CFE; */
         }
 
         .engine-option[data-engine="yandex"] i {
-            color: #FFCC00;
+            /* color: #FFCC00; */
         }
 
         .engine-option span {
@@ -429,6 +435,24 @@
 
         .modal-overlay.active {
             display: flex;
+        }
+
+        .modal-content {
+            opacity: 0;
+            transform: scale(0.96) translateY(30px);
+            transition: opacity 0.35s cubic-bezier(0.4,0,0.2,1), transform 0.35s cubic-bezier(0.4,0,0.2,1);
+        }
+
+        .modal-overlay.active .modal-content {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+
+        .modal-overlay:not(.active) .modal-content {
+            opacity: 0;
+            transform: scale(0.96) translateY(30px);
+            pointer-events: none;
         }
 
         .modal-content {
@@ -619,14 +643,6 @@
                             <i class="fab fa-microsoft"></i>
                             <span>Bing</span>
                         </div>
-                        <div class="engine-option" data-engine="duckduckgo" data-url="https://duckduckgo.com/?q=">
-                            <i class="fas fa-user-secret"></i>
-                            <span>DuckDuckGo</span>
-                        </div>
-                        <div class="engine-option" data-engine="yahoo" data-url="https://search.yahoo.com/search?p=">
-                            <i class="fab fa-yahoo"></i>
-                            <span>Yahoo</span>
-                        </div>
                         <div class="engine-option" data-engine="brave" data-url="https://search.brave.com/search?q=">
                             <i class="fas fa-shield-halved"></i>
                             <span>Brave</span>
@@ -634,14 +650,6 @@
                         <div class="engine-option" data-engine="ecosia" data-url="https://www.ecosia.org/search?q=">
                             <i class="fas fa-leaf"></i>
                             <span>Ecosia</span>
-                        </div>
-                        <div class="engine-option" data-engine="qwant" data-url="https://www.qwant.com/?q=">
-                            <i class="fas fa-magnifying-glass"></i>
-                            <span>Qwant</span>
-                        </div>
-                        <div class="engine-option" data-engine="yandex" data-url="https://yandex.com/search/?text=">
-                            <i class="fab fa-yandex-international"></i>
-                            <span>Yandex</span>
                         </div>
                     </div>
                 </div>
@@ -722,15 +730,26 @@
             } else {
                 greeting = 'Bonjour';
             }
-            
+
             // Récupérer le nom depuis localStorage
             const userName = localStorage.getItem('userName');
             const greetingElement = document.getElementById('greetingText');
-            
+
             if (userName) {
                 greetingElement.innerHTML = `${greeting}, <span class="user-name">${userName}</span>`;
             } else {
-                greetingElement.textContent = greeting;
+                greetingElement.innerHTML = `${greeting}, <span class="user-placeholder-wrapper"><span class="user-name user-placeholder" id="userPlaceholder">{User}</span><span class="user-help-text">*Cliquez pour définir votre nom d'utilisateur</span></span>`;
+                // Ajout de l'écouteur de clic sur User
+                setTimeout(() => {
+                    const userPlaceholder = document.getElementById('userPlaceholder');
+                    if (userPlaceholder) {
+                        userPlaceholder.addEventListener('click', () => {
+                            modalOverlay.classList.add('active');
+                            nameInput.value = '';
+                            nameInput.focus();
+                        });
+                    }
+                }, 0);
             }
         }
 
