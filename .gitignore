@@ -1,0 +1,26 @@
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Éditeurs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Extensions empaquetées
+*.zip
+*.crx
+*.xpi
+
+# Logs
+*.log
+npm-debug.log*
+
+# Dépendances (si vous utilisez npm)
+node_modules/
+
+# Fichiers temporaires
+.tmp/
+temp/

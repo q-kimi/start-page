@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nouvelle page</title>
+    
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome 6.4.0 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* === CSS RESET & VARIABLES === */
+        :root {
+            --bg-color: #0f0f12;
+            --surface-color: #1e1e24;
+            --surface-hover: #2a2a35;
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --accent-color: #6366f1;
+            --accent-hover: #818cf8;
+            --border-radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: radial-gradient(circle at 50% 0%, #1f1f2e 0%, var(--bg-color) 70%);
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* === HEADER === */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 25px 40px;
+            z-index: 10;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* === WEATHER WIDGET === */
+        .weather-widget {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 12px 20px;
+            transition: var(--transition);
+        }
+
+        .weather-widget:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .weather-icon {
+            font-size: 1.8rem;
+            color: var(--accent-color);
+        }
+
+        .weather-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .weather-temp {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .weather-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* === CLOCK WIDGET === */
+        .clock-widget {
+            text-align: right;
+        }
+
+        .clock-time {
+            font-size: 2.2rem;
+            font-weight: 300;
+            color: var(--text-primary);
+            line-height: 1;
+            letter-spacing: -1px;
+        }
+
+        .clock-date {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* === HAMBURGER BUTTON === */
+        .hamburger-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 8px;
+            transition: var(--transition);
+        }
+
+        .hamburger-btn:hover {
+            color: var(--text-primary);
+            transform: rotate(90deg);
+        }
+
+        /* === MAIN CONTENT === */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* === GREETING === */
+        .greeting-text {
+            font-size: 2.2rem;
+            font-weight: 300;
+            margin-bottom: 40px;
+            animation: fadeIn 0.8s ease-out 0.2s both, slideUp 0.8s ease-out 0.2s both;
+        }
+
+        .greeting-text .user-name {
+            color: var(--accent-color);
+            font-weight: 400;
+        }
+
+        /* === SEARCH WRAPPER === */
+        .search-wrapper {
+            width: 100%;
+            max-width: 650px;
+            margin-bottom: 50px;
+            animation: fadeIn 0.8s ease-out 0.5s both, slideUp 0.8s ease-out 0.5s both;
+            position: relative;
+            z-index: 1000;
+        }
+
+        .search-form {
+            display: flex;
+            align-items: center;
+            background: var(--surface-color);
+            border-radius: 35px;
+            padding: 8px 8px 8px 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            transition: var(--transition);
+            position: relative;
+            z-index: 100;
+        }
+
+        .search-form:focus-within {
+            box-shadow: 0 10px 50px rgba(99, 102, 241, 0.3);
+            background: var(--surface-hover);
+        }
+
+        /* === ENGINE SELECTOR === */
+        .engine-selector {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: var(--transition);
+            position: relative;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            margin-right: 12px;
+        }
+
+        .engine-selector:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .engine-icon {
+            font-size: 1rem;
+        }
+
+        /* Couleurs pour l'icône sélectionnée */
+        .engine-selector[data-engine="google"] .engine-icon {
+            color: #4285F4;
+        }
+
+        .engine-selector[data-engine="bing"] .engine-icon {
+            color: #008373;
+        }
+
+        .engine-selector[data-engine="duckduckgo"] .engine-icon {
+            color: #DE5833;
+        }
+
+        .engine-selector[data-engine="yahoo"] .engine-icon {
+            color: #7B0099;
+        }
+
+        .engine-selector[data-engine="brave"] .engine-icon {
+            color: #FB542B;
+        }
+
+        .engine-selector[data-engine="ecosia"] .engine-icon {
+            color: #69B830;
+        }
+
+        .engine-selector[data-engine="qwant"] .engine-icon {
+            color: #5A9CFE;
+        }
+
+        .engine-selector[data-engine="yandex"] .engine-icon {
+            color: #FFCC00;
+        }
+
+        .engine-name {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .engine-arrow {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-left: 4px;
+        }
+
+        /* === ENGINE DROPDOWN === */
+        .engine-dropdown {
+            display: none;
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            background: var(--bg-color);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            min-width: 180px;
+            z-index: 10001;
+        }
+
+        .engine-dropdown.active {
+            display: block;
+        }
+
+        .engine-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .engine-option:hover {
+            background: var(--surface-hover);
+        }
+
+        .engine-option i {
+            font-size: 1rem;
+        }
+
+        /* Couleurs d'identification des moteurs de recherche */
+        .engine-option[data-engine="google"] i {
+            color: #4285F4;
+        }
+
+        .engine-option[data-engine="bing"] i {
+            color: #008373;
+        }
+
+        .engine-option[data-engine="duckduckgo"] i {
+            color: #DE5833;
+        }
+
+        .engine-option[data-engine="yahoo"] i {
+            color: #7B0099;
+        }
+
+        .engine-option[data-engine="brave"] i {
+            color: #FB542B;
+        }
+
+        .engine-option[data-engine="ecosia"] i {
+            color: #69B830;
+        }
+
+        .engine-option[data-engine="qwant"] i {
+            color: #5A9CFE;
+        }
+
+        .engine-option[data-engine="yandex"] i {
+            color: #FFCC00;
+        }
+
+        .engine-option span {
+            font-size: 0.9rem;
+        }
+
+        /* === SEARCH INPUT === */
+        .search-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            padding: 8px;
+        }
+
+        .search-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        /* === SEARCH BUTTON === */
+        .search-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            border: none;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+
+        .search-btn:hover {
+            background: var(--accent-hover);
+            transform: scale(1.05);
+        }
+
+        /* === QUICK LINKS === */
+        .quick-links {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeIn 0.8s ease-out 0.9s both, slideUp 0.8s ease-out 0.9s both;
+            position: relative;
+            z-index: 1;
+        }
+
+        .quick-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: var(--transition);
+        }
+
+        .quick-link:hover {
+            transform: translateY(-5px);
+        }
+
+        .link-icon {
+            width: 55px;
+            height: 55px;
+            background: var(--surface-color);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            transition: var(--transition);
+        }
+
+        .quick-link:hover .link-icon {
+            background: var(--surface-hover);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .link-name {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* === MODAL === */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--surface-color);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 500;
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-color);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            margin-bottom: 20px;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .modal-input:focus {
+            border-color: var(--accent-color);
+        }
+
+        .modal-save {
+            width: 100%;
+            padding: 12px;
+            background: var(--accent-color);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-save:hover {
+            background: var(--accent-hover);
+        }
+
+        /* === ANIMATIONS === */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 700px) {
+            header {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+                padding: 20px;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .weather-widget {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .clock-widget {
+                text-align: left;
+            }
+
+            .clock-time {
+                font-size: 1.8rem;
+            }
+
+            .greeting-text {
+                font-size: 1.8rem;
+            }
+
+            .search-wrapper {
+                max-width: 95%;
+            }
+
+            .search-form {
+                padding: 6px 6px 6px 15px;
+            }
+
+            .engine-selector {
+                padding: 6px 10px;
+            }
+
+            .search-btn {
+                width: 40px;
+                height: 40px;
+            }
+
+            .quick-links {
+                gap: 20px;
+            }
+
+            .link-icon {
+                width: 50px;
+                height: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="weather-widget">
+            <i class="weather-icon fas fa-cloud"></i>
+            <div class="weather-info">
+                <div class="weather-temp">--°C</div>
+                <div class="weather-desc">Chargement...</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="clock-widget">
+                <div class="clock-time">00:00</div>
+                <div class="clock-date">Chargement...</div>
+            </div>
+            <button class="hamburger-btn" id="hamburgerBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <h1 class="greeting-text" id="greetingText">Bonjour</h1>
+
+        <div class="search-wrapper">
+            <form class="search-form" id="searchForm">
+                <div class="engine-selector" id="engineSelector" data-engine="google">
+                    <i class="engine-icon fab fa-google"></i>
+                    <span class="engine-name">Google</span>
+                    <i class="engine-arrow fas fa-chevron-down"></i>
+                    
+                    <div class="engine-dropdown" id="engineDropdown">
+                        <div class="engine-option" data-engine="google" data-url="https://www.google.com/search?q=">
+                            <i class="fab fa-google"></i>
+                            <span>Google</span>
+                        </div>
+                        <div class="engine-option" data-engine="bing" data-url="https://www.bing.com/search?q=">
+                            <i class="fab fa-microsoft"></i>
+                            <span>Bing</span>
+                        </div>
+                        <div class="engine-option" data-engine="duckduckgo" data-url="https://duckduckgo.com/?q=">
+                            <i class="fas fa-user-secret"></i>
+                            <span>DuckDuckGo</span>
+                        </div>
+                        <div class="engine-option" data-engine="yahoo" data-url="https://search.yahoo.com/search?p=">
+                            <i class="fab fa-yahoo"></i>
+                            <span>Yahoo</span>
+                        </div>
+                        <div class="engine-option" data-engine="brave" data-url="https://search.brave.com/search?q=">
+                            <i class="fas fa-shield-halved"></i>
+                            <span>Brave</span>
+                        </div>
+                        <div class="engine-option" data-engine="ecosia" data-url="https://www.ecosia.org/search?q=">
+                            <i class="fas fa-leaf"></i>
+                            <span>Ecosia</span>
+                        </div>
+                        <div class="engine-option" data-engine="qwant" data-url="https://www.qwant.com/?q=">
+                            <i class="fas fa-magnifying-glass"></i>
+                            <span>Qwant</span>
+                        </div>
+                        <div class="engine-option" data-engine="yandex" data-url="https://yandex.com/search/?text=">
+                            <i class="fab fa-yandex-international"></i>
+                            <span>Yandex</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <input type="text" class="search-input" placeholder="Rechercher sur le web..." id="searchInput" autocomplete="off">
+                
+                <button type="submit" class="search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </div>
+
+        <div class="quick-links">
+            <a href="https://gmail.com" class="quick-link" target="_blank">
+                <div class="link-icon">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <span class="link-name">Mail</span>
+            </a>
+            <a href="https://github.com" class="quick-link" target="_blank">
+                <div class="link-icon">
+                    <i class="fab fa-github"></i>
+                </div>
+                <span class="link-name">GitHub</span>
+            </a>
+            <a href="https://reddit.com" class="quick-link" target="_blank">
+                <div class="link-icon">
+                    <i class="fab fa-reddit"></i>
+                </div>
+                <span class="link-name">Reddit</span>
+            </a>
+            <a href="https://twitter.com" class="quick-link" target="_blank">
+                <div class="link-icon">
+                    <i class="fab fa-twitter"></i>
+                </div>
+                <span class="link-name">Twitter</span>
+            </a>
+        </div>
+    </main>
+
+    <!-- Modal for Name Settings -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Paramètres</h2>
+                <button class="modal-close" id="modalClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <input type="text" class="modal-input" id="nameInput" placeholder="Votre prénom..." maxlength="30">
+            <button class="modal-save" id="modalSave">Sauvegarder</button>
+        </div>
+    </div>
+
+    <script>
+        // === VARIABLES GLOBALES ===
+        let currentEngineUrl = 'https://www.google.com/search?q=';
+
+        // === HORLOGE & SALUTATION ===
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            
+            // Afficher l'heure
+            document.querySelector('.clock-time').textContent = `${hours}:${minutes}`;
+            
+            // Afficher la date en français
+            const options = { weekday: 'long', day: 'numeric', month: 'long' };
+            const dateStr = now.toLocaleDateString('fr-FR', options);
+            document.querySelector('.clock-date').textContent = dateStr;
+            
+            // Logique de salutation
+            const hour = now.getHours();
+            let greeting;
+            if (hour >= 18) {
+                greeting = 'Bonsoir';
+            } else {
+                greeting = 'Bonjour';
+            }
+            
+            // Récupérer le nom depuis localStorage
+            const userName = localStorage.getItem('userName');
+            const greetingElement = document.getElementById('greetingText');
+            
+            if (userName) {
+                greetingElement.innerHTML = `${greeting}, <span class="user-name">${userName}</span>`;
+            } else {
+                greetingElement.textContent = greeting;
+            }
+        }
+
+        // Mettre à jour toutes les secondes
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // === GESTION DU NOM (MODAL) ===
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalClose = document.getElementById('modalClose');
+        const modalSave = document.getElementById('modalSave');
+        const nameInput = document.getElementById('nameInput');
+
+        hamburgerBtn.addEventListener('click', () => {
+            modalOverlay.classList.add('active');
+            nameInput.value = localStorage.getItem('userName') || '';
+            nameInput.focus();
+        });
+
+        modalClose.addEventListener('click', () => {
+            modalOverlay.classList.remove('active');
+        });
+
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                modalOverlay.classList.remove('active');
+            }
+        });
+
+        modalSave.addEventListener('click', () => {
+            const name = nameInput.value.trim();
+            if (name) {
+                localStorage.setItem('userName', name);
+            } else {
+                localStorage.removeItem('userName');
+            }
+            updateClock();
+            modalOverlay.classList.remove('active');
+        });
+
+        nameInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                modalSave.click();
+            }
+        });
+
+        // === MÉTÉO ===
+        function getWeatherIcon(weatherCode) {
+            // Codes météo Open-Meteo
+            if (weatherCode === 0) return 'fa-sun'; // Clair
+            if (weatherCode <= 3) return 'fa-cloud-sun'; // Partiellement nuageux
+            if (weatherCode <= 48) return 'fa-cloud'; // Nuageux/Brouillard
+            if (weatherCode <= 67) return 'fa-cloud-rain'; // Pluie
+            if (weatherCode <= 77) return 'fa-snowflake'; // Neige
+            if (weatherCode <= 82) return 'fa-cloud-showers-heavy'; // Averses
+            if (weatherCode <= 86) return 'fa-cloud-snow'; // Neige
+            return 'fa-bolt'; // Orage
+        }
+
+        function getWeatherDesc(weatherCode) {
+            if (weatherCode === 0) return 'Ensoleillé';
+            if (weatherCode <= 3) return 'Partiellement nuageux';
+            if (weatherCode <= 48) return 'Nuageux';
+            if (weatherCode <= 67) return 'Pluvieux';
+            if (weatherCode <= 77) return 'Neigeux';
+            if (weatherCode <= 82) return 'Averses';
+            if (weatherCode <= 86) return 'Neige';
+            return 'Orageux';
+        }
+
+        function fetchWeather() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        
+                        fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`)
+                            .then(response => response.json())
+                            .then(data => {
+                                const temp = Math.round(data.current_weather.temperature);
+                                const weatherCode = data.current_weather.weathercode;
+                                
+                                document.querySelector('.weather-temp').textContent = `${temp}°C`;
+                                document.querySelector('.weather-desc').textContent = getWeatherDesc(weatherCode);
+                                document.querySelector('.weather-icon').className = `weather-icon fas ${getWeatherIcon(weatherCode)}`;
+                            })
+                            .catch(error => {
+                                console.error('Erreur météo:', error);
+                                document.querySelector('.weather-temp').textContent = '--°C';
+                                document.querySelector('.weather-desc').textContent = 'Non disponible';
+                            });
+                    },
+                    (error) => {
+                        console.error('Géolocalisation refusée:', error);
+                        document.querySelector('.weather-temp').textContent = '--°C';
+                        document.querySelector('.weather-desc').textContent = 'Non disponible';
+                    }
+                );
+            } else {
+                document.querySelector('.weather-temp').textContent = '--°C';
+                document.querySelector('.weather-desc').textContent = 'Non disponible';
+            }
+        }
+
+        fetchWeather();
+
+        // === RECHERCHE ===
+        const engineSelector = document.getElementById('engineSelector');
+        const engineDropdown = document.getElementById('engineDropdown');
+        const searchForm = document.getElementById('searchForm');
+        const searchInput = document.getElementById('searchInput');
+
+        // Toggle dropdown
+        engineSelector.addEventListener('click', (e) => {
+            e.stopPropagation();
+            engineDropdown.classList.toggle('active');
+        });
+
+        // Fermer dropdown en cliquant ailleurs
+        document.addEventListener('click', () => {
+            engineDropdown.classList.remove('active');
+        });
+
+        // Sélection du moteur
+        document.querySelectorAll('.engine-option').forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.stopPropagation();
+                
+                const engine = option.dataset.engine;
+                const url = option.dataset.url;
+                const icon = option.querySelector('i').className;
+                const name = option.querySelector('span').textContent;
+                
+                // Mettre à jour l'interface
+                document.querySelector('.engine-icon').className = `engine-icon ${icon}`;
+                document.querySelector('.engine-name').textContent = name;
+                engineSelector.setAttribute('data-engine', engine);
+                currentEngineUrl = url;
+                
+                // Fermer le dropdown
+                engineDropdown.classList.remove('active');
+            });
+        });
+
+        // Soumission du formulaire
+        searchForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const query = searchInput.value.trim();
+            
+            if (query) {
+                window.location.href = currentEngineUrl + encodeURIComponent(query);
+            }
+        });
+    </script>
+</body>
+</html>

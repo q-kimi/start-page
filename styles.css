@@ -1,0 +1,523 @@
+/* Reset et variables */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg-primary: #1a1d28;
+    --bg-secondary: #24272f;
+    --text-primary: #e4e6eb;
+    --text-secondary: #9ca3af;
+    --border-color: #3a3d4a;
+    --hover-bg: #2f323a;
+    --search-bg: #24272f;
+    --modal-bg: #1a1d28;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    min-height: 100vh;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    overflow-x: hidden;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 2rem 3rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+}
+
+/* Météo */
+.weather {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(36, 39, 47, 0.5);
+    padding: 0.75rem 1.25rem;
+    border-radius: 16px;
+    border: 1px solid rgba(58, 61, 74, 0.3);
+}
+
+.weather-icon {
+    color: #7c8db0;
+}
+
+.weather-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.weather-temp {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.weather-desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+/* Horloge */
+.clock {
+    text-align: right;
+}
+
+.time {
+    font-size: 3.5rem;
+    font-weight: 300;
+    letter-spacing: -2px;
+    color: var(--text-primary);
+    line-height: 1;
+    margin-bottom: 0.25rem;
+}
+
+.date {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+}
+
+/* Bouton menu */
+.menu-btn {
+    position: absolute;
+    top: 2rem;
+    right: 3rem;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: color 0.2s;
+}
+
+.menu-btn:hover {
+    color: var(--text-primary);
+}
+
+/* Contenu central */
+.main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+/* Message de salutation */
+.greeting {
+    font-size: 3rem;
+    font-weight: 300;
+    margin-bottom: 2.5rem;
+    color: var(--text-primary);
+}
+
+.greeting .name {
+    color: #6b7ac7;
+    font-weight: 400;
+}
+
+/* Barre de recherche */
+.search-container {
+    width: 100%;
+    max-width: 650px;
+    margin-bottom: 3rem;
+    position: relative;
+    z-index: 1000;
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+    background: var(--search-bg);
+    border-radius: 50px;
+    border: 1px solid var(--border-color);
+    padding: 0.5rem 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    position: relative;
+}
+
+.search-form:focus-within {
+    border-color: #5f6caf;
+    box-shadow: 0 0 0 3px rgba(95, 108, 175, 0.1);
+}
+
+.search-engine {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    border-right: 1px solid var(--border-color);
+    margin-right: 0.75rem;
+    position: relative;
+}
+
+/* Menu déroulant des moteurs de recherche */
+.engine-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 12px);
+    left: 0;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    min-width: 200px;
+    z-index: 10000;
+}
+
+.engine-dropdown.active {
+    display: block;
+}
+
+.engine-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background 0.2s;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+}
+
+.engine-option:hover {
+    background: var(--hover-bg);
+}
+
+.engine-option svg,
+.engine-option i {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.google-icon {
+    flex-shrink: 0;
+}
+
+.dropdown-icon {
+    color: var(--text-secondary);
+    flex-shrink: 0;
+}
+
+.search-input {
+    flex: 1;
+    padding: 0.75rem 0.5rem;
+    border: none;
+    background: transparent;
+    color: var(--text-primary);
+    font-size: 1rem;
+    outline: none;
+}
+
+.search-input::placeholder {
+    color: var(--text-secondary);
+}
+
+.search-button {
+    padding: 0.75rem;
+    border: none;
+    background: #6b7ac7;
+    color: white;
+    cursor: pointer;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    flex-shrink: 0;
+}
+
+.search-button:hover {
+    background: #5a69b6;
+}
+
+/* Raccourcis */
+.shortcuts {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 600px;
+}
+
+.shortcut {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.25rem 1.5rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: all 0.2s;
+    min-width: 90px;
+}
+
+.shortcut:hover {
+    background: var(--hover-bg);
+    transform: translateY(-2px);
+}
+
+.shortcut-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #3a3d4a;
+    border-radius: 12px;
+    color: var(--text-secondary);
+}
+
+.shortcut-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.shortcut-name {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+}
+
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: var(--modal-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h2 {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.75rem;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.close-btn:hover {
+    background: var(--hover-bg);
+    color: var(--text-primary);
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.setting-item {
+    margin-bottom: 1.5rem;
+}
+
+.setting-item label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+.setting-item input,
+.setting-item select {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.setting-item input:focus,
+.setting-item select:focus {
+    border-color: #5f6caf;
+    box-shadow: 0 0 0 3px rgba(95, 108, 175, 0.1);
+}
+
+.add-shortcut-btn,
+.save-btn {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: none;
+    background: #5f6caf;
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.add-shortcut-btn:hover,
+.save-btn:hover {
+    background: #4f5c9f;
+}
+
+.modal-footer {
+    padding: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+#shortcuts-manager {
+    margin-bottom: 1rem;
+}
+
+.shortcut-edit {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.shortcut-edit input {
+    flex: 1;
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 0.85rem;
+}
+
+.delete-shortcut {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    border: none;
+    background: #dc3545;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+.delete-shortcut:hover {
+    background: #c82333;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .header {
+        padding: 1.5rem;
+    }
+
+    .weather {
+        padding: 0.5rem 0.75rem;
+    }
+
+    .weather-icon {
+        width: 32px;
+        height: 32px;
+    }
+
+    .weather-temp {
+        font-size: 1rem;
+    }
+
+    .time {
+        font-size: 2.5rem;
+    }
+
+    .date {
+        font-size: 0.85rem;
+    }
+
+    .greeting {
+        font-size: 2rem;
+    }
+
+    .search-container {
+        max-width: 100%;
+    }
+
+    .shortcuts {
+        gap: 0.75rem;
+    }
+
+    .shortcut {
+        padding: 1rem;
+        min-width: 80px;
+    }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--hover-bg);
+}
+

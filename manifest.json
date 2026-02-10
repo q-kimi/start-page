@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Start Page",
+  "version": "1.0.0",
+  "description": "Une belle page de démarrage personnalisée avec horloge, recherche et favoris",
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "permissions": [
+    "storage",
+    "topSites"
+  ],
+  "icons": {
+    "16": "icons/icon16.svg",
+    "48": "icons/icon48.svg",
+    "128": "icons/icon128.svg"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}
