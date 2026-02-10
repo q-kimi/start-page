@@ -45,9 +45,9 @@
         }
 
         body, html {
-            user-select: none;
-            -webkit-user-select: none;
-            -ms-user-select: none;
+            user-select: none !important;
+            -webkit-user-select: none !important;
+            -ms-user-select: none !important;
         }
 
         /* === HEADER === */
@@ -889,20 +889,29 @@
     </script>
     <!-- Désactive le menu clic droit -->
     <script>
-        document.addEventListener('contextmenu', function(e) {
+        // Désactive le menu clic droit
+        window.addEventListener('contextmenu', function(e) {
             e.preventDefault();
         });
-        // Désactive Ctrl+A
-        document.addEventListener('keydown', function(e) {
+        // Désactive Ctrl+A et sélection
+        window.addEventListener('keydown', function(e) {
             if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'a') {
+                e.preventDefault();
+            }
+            // Désactive F12 et Ctrl+Shift+I
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'i')) {
                 e.preventDefault();
             }
         });
         // Désactive le drag & drop
-        document.addEventListener('dragover', function(e) {
+        window.addEventListener('dragover', function(e) {
             e.preventDefault();
         });
-        document.addEventListener('drop', function(e) {
+        window.addEventListener('drop', function(e) {
+            e.preventDefault();
+        });
+        // Désactive la sélection du texte
+        window.addEventListener('selectstart', function(e) {
             e.preventDefault();
         });
     </script>
