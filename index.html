@@ -397,7 +397,7 @@
 
     <script>
         // === VARIABLES ET DONNÉES ===
-        let currentEngine = 'https://www.google.com/search?q=';
+        let currentEngine = localStorage.getItem('currentEngine') || 'https://www.google.com/search?q=';
         const defaultLinks = [
             { id: 1, name: 'Mail', url: 'https://gmail.com', icon: 'fas fa-envelope' },
             { id: 2, name: 'GitHub', url: 'https://github.com', icon: 'fab fa-github' },
@@ -565,10 +565,20 @@
             opt.addEventListener('click', (e) => {
                 e.stopPropagation();
                 currentEngine = opt.dataset.url;
+                localStorage.setItem('currentEngine', currentEngine);
+                localStorage.setItem('currentEngineIcon', opt.dataset.icon);
+                localStorage.setItem('currentEngineName', opt.querySelector('span').textContent);
                 els.engineSelector.querySelector('.engine-icon').className = `engine-icon ${opt.dataset.icon}`;
                 els.engineSelector.querySelector('.engine-name').textContent = opt.querySelector('span').textContent;
                 els.engineDropdown.classList.remove('active');
             });
+                // Appliquer le moteur de recherche sauvegardé au chargement
+                const savedEngineIcon = localStorage.getItem('currentEngineIcon');
+                const savedEngineName = localStorage.getItem('currentEngineName');
+                if (savedEngineIcon && savedEngineName) {
+                    els.engineSelector.querySelector('.engine-icon').className = `engine-icon ${savedEngineIcon}`;
+                    els.engineSelector.querySelector('.engine-name').textContent = savedEngineName;
+                }
         });
 
         els.searchForm.addEventListener('submit', (e) => {
