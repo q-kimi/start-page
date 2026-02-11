@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nouvelle page</title>
+    <title>Nouvelle Page</title>
     
     <!-- Google Fonts - Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,41 +14,50 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* === CSS RESET & VARIABLES === */
+        /* === VARIABLES CSS (Strict Theme) === */
         :root {
-            --bg-color: #0f0f12;
+            /* Palette de couleurs */
+            --bg-gradient-start: #1f1f2e;
+            --bg-gradient-end: #0f0f12;
+            --bg-main: #0f0f12;
+            
             --surface-color: #1e1e24;
             --surface-hover: #2a2a35;
+            
             --text-primary: #ffffff;
             --text-secondary: #a1a1aa;
+            
             --accent-color: #6366f1;
             --accent-hover: #818cf8;
+            
+            --danger-color: #ef4444;
+            
             --border-radius: 16px;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        /* === RESET & BASE === */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            outline: none;
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: radial-gradient(circle at 50% 0%, #1f1f2e 0%, var(--bg-color) 70%);
-            background-color: var(--bg-color);
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at 50% 0%, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 70%);
+            background-color: var(--bg-main);
             color: var(--text-primary);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
-        body, html {
-            user-select: none !important;
-            -webkit-user-select: none !important;
-            -ms-user-select: none !important;
-        }
+        input { user-select: text !important; -webkit-user-select: text !important; }
 
         /* === HEADER === */
         header {
@@ -56,87 +65,47 @@
             justify-content: space-between;
             align-items: flex-start;
             padding: 25px 40px;
+            width: 100%;
             z-index: 10;
         }
 
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        /* === WEATHER WIDGET === */
         .weather-widget {
             display: flex;
             align-items: center;
             gap: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
+            background: rgba(30, 30, 36, 0.6);
+            backdrop-filter: blur(12px);
             border-radius: var(--border-radius);
             padding: 12px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
             transition: var(--transition);
         }
+        .weather-widget:hover { background: rgba(30, 30, 36, 0.9); border-color: rgba(255, 255, 255, 0.1); }
+        .weather-icon { font-size: 1.6rem; color: var(--accent-color); }
+        .weather-info { display: flex; flex-direction: column; line-height: 1.2; }
+        .weather-temp { font-size: 1.1rem; font-weight: 500; color: var(--text-primary); }
+        .weather-desc { font-size: 0.8rem; color: var(--text-secondary); text-transform: capitalize; }
 
-        .weather-widget:hover {
-            background: rgba(255, 255, 255, 0.08);
-        }
+        .header-right { display: flex; align-items: center; gap: 20px; }
+        .clock-widget { text-align: right; }
+        .clock-time { font-size: 2.2rem; font-weight: 300; color: var(--text-primary); line-height: 1; letter-spacing: -1px; }
+        .clock-date { font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px; }
 
-        .weather-icon {
-            font-size: 1.8rem;
-            color: var(--accent-color);
-        }
-
-        .weather-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .weather-temp {
-            font-size: 1.1rem;
-            font-weight: 500;
-            color: var(--text-primary);
-        }
-
-        .weather-desc {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
-        /* === CLOCK WIDGET === */
-        .clock-widget {
-            text-align: right;
-        }
-
-        .clock-time {
-            font-size: 2.2rem;
-            font-weight: 300;
-            color: var(--text-primary);
-            line-height: 1;
-            letter-spacing: -1px;
-        }
-                .user-help-text {
-                    display: block;
-                    color: var(--text-secondary);
-                    font-size: 0.68rem;
-                    margin-top: 1px;
-                    font-style: italic;
-                    text-align: center;
-                    line-height: 1.1;
-                       margin-left: 140px; /* Décale le texte d'aide un peu moins vers la droite */
-                }
         .hamburger-btn {
-            background: transparent;
-            border: none;
+            background: var(--surface-color);
+            border: 1px solid rgba(255,255,255,0.05);
             color: var(--text-secondary);
-            font-size: 1.5rem;
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
             cursor: pointer;
-            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
             transition: var(--transition);
         }
-
-        .hamburger-btn:hover {
-            color: var(--text-primary);
-        }
+        .hamburger-btn:hover { background: var(--surface-hover); color: var(--text-primary); transform: translateY(-2px); }
 
         /* === MAIN CONTENT === */
         main {
@@ -146,380 +115,167 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
+            width: 100%;
         }
 
-        /* === GREETING === */
-        .greeting-text {
-            font-size: 2.2rem;
-            font-weight: 300;
-            margin-bottom: 40px;
-            animation: fadeIn 0.8s ease-out 0.2s both, slideUp 0.8s ease-out 0.2s both;
+        .greeting-container { 
+            text-align: center; 
+            margin-bottom: 40px; 
+            animation: fadeIn 0.8s ease-out; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .greeting-text .user-name {
+        .greeting-text { 
+            font-size: 2rem; 
+            font-weight: 300; 
+            color: var(--text-primary);
+        }
+        
+        .user-name {
+            font-weight: 500;
             color: var(--accent-color);
-            font-weight: 400;
-        }
-
-        .greeting-text .user-placeholder {
             cursor: pointer;
         }
 
-        /* === SEARCH WRAPPER === */
-        .search-wrapper {
-            width: 100%;
-            max-width: 650px;
-            margin-bottom: 50px;
-            animation: fadeIn 0.8s ease-out 0.5s both, slideUp 0.8s ease-out 0.5s both;
-            position: relative;
-            z-index: 1000;
-        }
-
+        .search-wrapper { width: 100%; max-width: 650px; margin-bottom: 60px; position: relative; z-index: 100; animation: slideUp 0.8s ease-out 0.2s forwards; }
         .search-form {
             display: flex;
             align-items: center;
             background: var(--surface-color);
-            border-radius: 35px;
+            border-radius: 50px;
             padding: 8px 8px 8px 20px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             transition: var(--transition);
-            position: relative;
-            z-index: 100;
         }
+        .search-form:focus-within { box-shadow: 0 10px 50px rgba(99, 102, 241, 0.3); background: var(--surface-hover); }
 
-        .search-form:focus-within {
-            box-shadow: 0 10px 50px rgba(99, 102, 241, 0.3);
-            background: var(--surface-hover);
-        }
-
-        /* === ENGINE SELECTOR === */
         .engine-selector {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 12px;
-            cursor: pointer;
-            border-radius: 12px;
-            transition: var(--transition);
-            position: relative;
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-            margin-right: 12px;
+            display: flex; align-items: center; gap: 8px; padding: 8px 12px; cursor: pointer; border-radius: 12px;
+            transition: var(--transition); margin-right: 12px; border-right: 1px solid rgba(255,255,255,0.05);
         }
+        .engine-selector:hover { background: rgba(255,255,255,0.05); }
+        .engine-icon { font-size: 1rem; color: var(--text-primary); }
+        .engine-arrow { font-size: 0.7rem; color: var(--text-secondary); margin-left: 4px; }
 
-        .engine-selector:hover {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .engine-icon {
-            font-size: 1rem;
-        }
-
-        /* === ENGINE DROPDOWN === */
         .engine-dropdown {
-            display: none;
-            position: absolute;
-            top: calc(100% + 8px);
-            left: 0;
-            background: var(--bg-color);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-            min-width: 180px;
-            z-index: 10001;
+            display: none; position: absolute; top: 110%; left: 0; background: var(--bg-main); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); overflow: hidden; min-width: 180px; z-index: 1000;
+            opacity: 0; transform: translateY(-10px); transition: var(--transition);
         }
-
-        .engine-dropdown.active {
-            display: block;
-        }
-
+        .engine-dropdown.active { display: block; opacity: 1; transform: translateY(0); }
         .engine-option {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 16px;
-            cursor: pointer;
-            transition: var(--transition);
+            display: flex; align-items: center; gap: 10px; padding: 12px 16px; cursor: pointer; color: var(--text-secondary); transition: var(--transition);
         }
+        .engine-option:hover { background: var(--surface-hover); color: var(--text-primary); }
+        .engine-option i.fa-google { color: #4285F4; }
+        .engine-option i.fa-microsoft { color: #00A4EF; }
+        .engine-option i.fa-shield-halved { color: #FB542B; }
+        .engine-option i.fa-leaf { color: #69B830; }
 
-        .engine-option:hover {
-            background: var(--surface-hover);
-        }
-
-        .engine-option i {
-            font-size: 1rem;
-        }
-
-        /* === SEARCH INPUT === */
-        .search-input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            outline: none;
-            color: var(--text-primary);
-            font-size: 1rem;
-            font-family: 'Inter', sans-serif;
-            padding: 8px;
-        }
-
-        .search-input::placeholder {
-            color: var(--text-secondary);
-        }
-
-        /* === SEARCH BUTTON === */
+        .search-input { flex: 1; background: transparent; border: none; color: var(--text-primary); font-size: 1rem; font-family: 'Inter', sans-serif; padding: 8px; }
+        .search-input::placeholder { color: var(--text-secondary); }
         .search-btn {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: var(--accent-color);
-            border: none;
-            color: white;
-            font-size: 1rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-            flex-shrink: 0;
+            width: 45px; height: 45px; border-radius: 50%; background: var(--accent-color); border: none; color: white; font-size: 1rem;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; transition: var(--transition);
         }
+        .search-btn:hover { background: var(--accent-hover); transform: scale(1.05); }
 
-        .search-btn:hover {
-            background: var(--accent-hover);
-            transform: scale(1.05);
-        }
-
-        /* === QUICK LINKS === */
-        .quick-links {
-            display: flex;
-            gap: 30px;
-            flex-wrap: wrap;
-            justify-content: center;
-            animation: fadeIn 0.8s ease-out 0.9s both, slideUp 0.8s ease-out 0.9s both;
-            position: relative;
-            z-index: 1;
-        }
-
+        .quick-links-container { width: 100%; display: flex; flex-direction: column; align-items: center; animation: slideUp 0.8s ease-out 0.4s forwards; }
+        .quick-links { display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; }
         .quick-link {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-            color: var(--text-primary);
-            transition: var(--transition);
+            display: flex; flex-direction: column; align-items: center; gap: 10px; text-decoration: none; color: var(--text-primary); transition: var(--transition);
         }
-
-        .quick-link:hover {
-            transform: translateY(-5px);
-        }
-
+        .quick-link:hover { transform: translateY(-5px); }
         .link-icon {
-            width: 55px;
-            height: 55px;
-            background: var(--surface-color);
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-            transition: var(--transition);
+            width: 55px; height: 55px; background: var(--surface-color); border-radius: 14px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; transition: var(--transition); border: 1px solid rgba(255,255,255,0.02);
         }
-
         .quick-link:hover .link-icon {
-            background: var(--surface-hover);
-            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+            background: var(--surface-hover); box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3); border-color: rgba(99, 102, 241, 0.3);
         }
+        .link-name { font-size: 0.85rem; color: var(--text-secondary); }
 
-        .link-name {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
-        /* === MODAL === */
+        /* === MODALS === */
         .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(10px); z-index: 2000; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease;
         }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
+        .modal-overlay.active { display: flex; opacity: 1; }
         .modal-content {
-            opacity: 0;
-            transform: scale(0.96) translateY(30px);
-            transition: opacity 0.35s cubic-bezier(0.4,0,0.2,1), transform 0.35s cubic-bezier(0.4,0,0.2,1);
+            background: var(--surface-color); border-radius: var(--border-radius); padding: 30px; max-width: 450px; width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); border: 1px solid rgba(255,255,255,0.05); transform: scale(0.96) translateY(20px);
+            transition: var(--transition); position: relative;
         }
-
-        .modal-overlay.active .modal-content {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-        }
-
-
-        .modal-overlay:not(.active) .modal-content {
-            opacity: 0;
-            transform: scale(0.96) translateY(30px);
-            pointer-events: none;
-        }
-
-        .modal-content {
-            background: var(--surface-color);
-            border-radius: var(--border-radius);
-            padding: 30px;
-            max-width: 400px;
-            width: 90%;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .modal-title {
-            font-size: 1.3rem;
-            font-weight: 500;
-        }
-
+        .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .modal-title { font-size: 1.3rem; font-weight: 500; color: var(--text-primary); }
         .modal-close {
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: var(--transition);
+            background: transparent; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer; transition: var(--transition);
         }
-
-        .modal-close:hover {
-            color: var(--text-primary);
-        }
-
+        .modal-close:hover { color: var(--text-primary); }
         .modal-input {
-            width: 100%;
-            padding: 12px;
-            background: var(--bg-color);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            color: var(--text-primary);
-            font-size: 1rem;
-            font-family: 'Inter', sans-serif;
-            margin-bottom: 20px;
-            outline: none;
-            transition: var(--transition);
+            width: 100%; padding: 12px; background: var(--bg-main); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: var(--text-primary);
+            font-size: 1rem; font-family: 'Inter', sans-serif; margin-bottom: 20px; outline: none; transition: var(--transition);
         }
+        .modal-input:focus { border-color: var(--accent-color); }
+        .modal-btn {
+            width: 100%; padding: 12px; background: var(--accent-color); border: none; border-radius: 8px; color: white; font-size: 1rem;
+            font-weight: 500; cursor: pointer; transition: var(--transition);
+        }
+        .modal-btn:hover { background: var(--accent-hover); }
 
-        .modal-input:focus {
-            border-color: var(--accent-color);
+        /* Bouton Secondaire (Gestion Liens) */
+        .modal-secondary-btn {
+            width: 100%; padding: 10px; background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); border-radius: 8px;
+            cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 8px; transition: var(--transition);
+            margin-top: 15px;
         }
+        .modal-secondary-btn:hover { background: rgba(99, 102, 241, 0.1); }
 
-        .modal-save {
-            width: 100%;
-            padding: 12px;
-            background: var(--accent-color);
-            border: none;
-            border-radius: 8px;
-            color: white;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: var(--transition);
+        /* === LINKS MANAGER === */
+        .links-list { max-height: 300px; overflow-y: auto; margin-bottom: 20px; padding-right: 5px; }
+        .links-list::-webkit-scrollbar { width: 6px; }
+        .links-list::-webkit-scrollbar-thumb { background: var(--surface-hover); border-radius: 3px; }
+        .link-item-manager {
+            display: flex; align-items: center; justify-content: space-between; padding: 10px; background: rgba(255,255,255,0.03); border-radius: 8px;
+            margin-bottom: 8px; border: 1px solid transparent; transition: var(--transition);
         }
-
-        .modal-save:hover {
-            background: var(--accent-hover);
+        .link-item-manager:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.05); }
+        .link-info { display: flex; align-items: center; gap: 10px; flex: 1; }
+        .link-info i { color: var(--text-secondary); font-size: 1.1rem; }
+        .link-info span { font-size: 0.9rem; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px; }
+        .link-actions { display: flex; gap: 5px; }
+        .action-btn { background: transparent; border: none; color: var(--text-secondary); cursor: pointer; padding: 5px; border-radius: 4px; transition: var(--transition); font-size: 0.9rem; }
+        .action-btn:hover { background: rgba(255,255,255,0.1); color: var(--text-primary); }
+        .action-btn.delete:hover { background: rgba(239, 68, 68, 0.2); color: var(--danger-color); }
+        .add-link-btn {
+            width: 100%; padding: 10px; background: rgba(99, 102, 241, 0.1); color: var(--accent-color); border: 1px dashed var(--accent-color);
+            border-radius: 8px; cursor: pointer; font-weight: 500; transition: var(--transition);
         }
+        .add-link-btn:hover { background: var(--accent-color); color: white; }
 
         /* === ANIMATIONS === */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes slideUp {
-            from {
-                transform: translateY(30px);
-            }
-            to {
-                transform: translateY(0);
-            }
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
         /* === RESPONSIVE === */
-        @media (max-width: 700px) {
-            header {
-                flex-direction: column;
-                align-items: center;
-                gap: 15px;
-                padding: 20px;
-            }
-
-            .header-right {
-                width: 100%;
-                justify-content: space-between;
-            }
-
-            .weather-widget {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .clock-widget {
-                text-align: left;
-            }
-
-            .clock-time {
-                font-size: 1.8rem;
-            }
-
-            .greeting-text {
-                font-size: 1.8rem;
-            }
-
-            .search-wrapper {
-                max-width: 95%;
-            }
-
-            .search-form {
-                padding: 6px 6px 6px 15px;
-            }
-
-            .engine-selector {
-                padding: 6px 10px;
-            }
-
-            .search-btn {
-                width: 40px;
-                height: 40px;
-            }
-
-            .quick-links {
-                gap: 20px;
-            }
-
-            .link-icon {
-                width: 50px;
-                height: 50px;
-            }
+        @media (max-width: 600px) {
+            header { flex-direction: column-reverse; padding: 20px; gap: 15px; }
+            .header-right { width: 100%; justify-content: space-between; }
+            .weather-widget { width: 100%; justify-content: center; }
+            .clock-widget { text-align: center; width: 100%; }
+            .greeting-text { font-size: 1.5rem; }
+            .search-wrapper { max-width: 95%; }
+            .quick-links { gap: 20px; }
+            .link-icon { width: 50px; height: 50px; font-size: 1.2rem; }
         }
     </style>
 </head>
 <body>
+
     <!-- Header -->
     <header>
         <div class="weather-widget" id="weatherWidget">
@@ -529,12 +285,13 @@
                 <div class="weather-desc">Chargement...</div>
             </div>
         </div>
+
         <div class="header-right">
             <div class="clock-widget">
-                <div class="clock-time">00:00</div>
-                <div class="clock-date">Chargement...</div>
+                <div class="clock-time" id="clockTime">00:00</div>
+                <div class="clock-date" id="clockDate">...</div>
             </div>
-            <button class="hamburger-btn" id="hamburgerBtn">
+            <button class="hamburger-btn" id="hamburgerBtn" aria-label="Menu">
                 <i class="fas fa-bars"></i>
             </button>
         </div>
@@ -542,315 +299,356 @@
 
     <!-- Main Content -->
     <main>
-        <h1 class="greeting-text" id="greetingText">Bonjour</h1>
+        <div class="greeting-container">
+            <h1 class="greeting-text">
+                <span id="greetingPrefix">Bonjour, </span>
+                <span class="user-name" id="userNameDisplay">{User}</span>
+            </h1>
+        </div>
 
         <div class="search-wrapper">
             <form class="search-form" id="searchForm">
-                <div class="engine-selector" id="engineSelector" data-engine="google">
+                <div class="engine-selector" id="engineSelector">
                     <i class="engine-icon fab fa-google"></i>
-                    <span class="engine-name">Google</span>
+                    <span class="engine-name" style="font-size:0.9rem; font-weight:500; color:var(--text-secondary)">Google</span>
                     <i class="engine-arrow fas fa-chevron-down"></i>
                     
                     <div class="engine-dropdown" id="engineDropdown">
-                        <div class="engine-option" data-engine="google" data-url="https://www.google.com/search?q=">
-                            <i class="fab fa-google"></i>
-                            <span>Google</span>
+                        <div class="engine-option" data-engine="google" data-url="https://www.google.com/search?q=" data-icon="fab fa-google">
+                            <i class="fab fa-google"></i> <span>Google</span>
                         </div>
-                        <div class="engine-option" data-engine="bing" data-url="https://www.bing.com/search?q=">
-                            <i class="fab fa-microsoft"></i>
-                            <span>Bing</span>
+                        <div class="engine-option" data-engine="bing" data-url="https://www.bing.com/search?q=" data-icon="fab fa-microsoft">
+                            <i class="fab fa-microsoft"></i> <span>Bing</span>
                         </div>
-                        <div class="engine-option" data-engine="brave" data-url="https://search.brave.com/search?q=">
-                            <i class="fas fa-shield-halved"></i>
-                            <span>Brave</span>
+                        <div class="engine-option" data-engine="brave" data-url="https://search.brave.com/search?q=" data-icon="fas fa-shield-halved">
+                            <i class="fas fa-shield-halved"></i> <span>Brave</span>
                         </div>
-                        <div class="engine-option" data-engine="ecosia" data-url="https://www.ecosia.org/search?q=">
-                            <i class="fas fa-leaf"></i>
-                            <span>Ecosia</span>
+                        <div class="engine-option" data-engine="ecosia" data-url="https://www.ecosia.org/search?q=" data-icon="fas fa-leaf">
+                            <i class="fas fa-leaf"></i> <span>Ecosia</span>
                         </div>
                     </div>
                 </div>
                 
                 <input type="text" class="search-input" placeholder="Rechercher sur le web..." id="searchInput" autocomplete="off">
-                
-                <button type="submit" class="search-btn">
-                    <i class="fas fa-search"></i>
-                </button>
+                <button type="submit" class="search-btn"><i class="fas fa-search"></i></button>
             </form>
         </div>
 
-        <div class="quick-links">
-            <a href="https://gmail.com" class="quick-link" target="_blank">
-                <div class="link-icon">
-                    <i class="fas fa-envelope"></i>
-                </div>
-                <span class="link-name">Mail</span>
-            </a>
-            <a href="https://github.com" class="quick-link" target="_blank">
-                <div class="link-icon">
-                    <i class="fab fa-github"></i>
-                </div>
-                <span class="link-name">GitHub</span>
-            </a>
-            <a href="https://reddit.com" class="quick-link" target="_blank">
-                <div class="link-icon">
-                    <i class="fab fa-reddit"></i>
-                </div>
-                <span class="link-name">Reddit</span>
-            </a>
-            <a href="https://twitter.com" class="quick-link" target="_blank">
-                <div class="link-icon">
-                    <i class="fab fa-twitter"></i>
-                </div>
-                <span class="link-name">Twitter</span>
-            </a>
+        <div class="quick-links-container">
+            <div class="quick-links" id="quickLinks">
+                <!-- Liens générés par JS -->
+            </div>
         </div>
     </main>
 
-    <!-- Modal for Name Settings -->
-    <div class="modal-overlay" id="modalOverlay">
+    <!-- Modal 1: Paramètres Utilisateur -->
+    <div class="modal-overlay" id="modalUser">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title">Paramètres</h2>
-                <button class="modal-close" id="modalClose">
-                    <i class="fas fa-times"></i>
-                </button>
+                <h3 class="modal-title">Profil</h3>
+                <button class="modal-close" data-target="modalUser"><i class="fas fa-times"></i></button>
             </div>
             <input type="text" class="modal-input" id="nameInput" placeholder="Votre prénom..." maxlength="30">
-            <button class="modal-save" id="modalSave">Sauvegarder</button>
+            <button class="modal-btn" id="saveNameBtn">Sauvegarder</button>
+            
+            <!-- Bouton déplacé ici -->
+            <div style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+                <button class="modal-secondary-btn" id="manageLinksBtn">
+                    <i class="fas fa-link"></i> Gérer mes liens rapides
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2: Gestionnaire de Liens -->
+    <div class="modal-overlay" id="modalLinks">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3 class="modal-title">Gérer mes liens</h3>
+                <button class="modal-close" data-target="modalLinks"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <div class="links-list" id="linksListManager">
+                <!-- Liste des liens générée par JS -->
+            </div>
+
+            <button class="add-link-btn" id="addLinkBtn"><i class="fas fa-plus"></i> Ajouter un lien</button>
+        </div>
+    </div>
+
+    <!-- Modal 3: Ajouter / Modifier un lien -->
+    <div class="modal-overlay" id="modalLinkForm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="linkFormTitle">Ajouter un lien</h3>
+                <button class="modal-close" data-target="modalLinkForm"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <input type="text" class="modal-input" id="linkNameInput" placeholder="Nom (ex: Netflix)">
+            <input type="text" class="modal-input" id="linkUrlInput" placeholder="URL (ex: https://netflix.com)">
+            <input type="text" class="modal-input" id="linkIconInput" placeholder="Classe Icone (ex: fas fa-play)">
+            <p style="font-size:0.75rem; color:var(--text-secondary); margin-bottom:15px; text-align:center;">
+                Trouvez des icônes sur <a href="https://fontawesome.com/search" target="_blank" style="color:var(--accent-color);">FontAwesome</a>
+            </p>
+            
+            <button class="modal-btn" id="saveLinkBtn">Valider</button>
         </div>
     </div>
 
     <script>
-        // === VARIABLES GLOBALES ===
-        let currentEngineUrl = 'https://www.google.com/search?q=';
+        // === VARIABLES ET DONNÉES ===
+        let currentEngine = 'https://www.google.com/search?q=';
+        const defaultLinks = [
+            { id: 1, name: 'Mail', url: 'https://gmail.com', icon: 'fas fa-envelope' },
+            { id: 2, name: 'GitHub', url: 'https://github.com', icon: 'fab fa-github' },
+            { id: 3, name: 'Reddit', url: 'https://reddit.com', icon: 'fab fa-reddit' },
+            { id: 4, name: 'Twitter', url: 'https://twitter.com', icon: 'fab fa-twitter' }
+        ];
+        let myLinks = JSON.parse(localStorage.getItem('myLinks')) || defaultLinks;
+        let editingLinkId = null;
 
-        // === HORLOGE & SALUTATION ===
-        function updateClock() {
-            const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            
-            // Afficher l'heure
-            document.querySelector('.clock-time').textContent = `${hours}:${minutes}`;
-            
-            // Afficher la date en français
-            const options = { weekday: 'long', day: 'numeric', month: 'long' };
-            const dateStr = now.toLocaleDateString('fr-FR', options);
-            document.querySelector('.clock-date').textContent = dateStr;
-            
-            // Logique de salutation
-            const hour = now.getHours();
-            let greeting;
-            if (hour >= 18 || hour < 6) {
-                greeting = 'Bonsoir';
-            } else if (hour < 12) {
-                greeting = 'Bonjour';
-            } else {
-                greeting = 'Bon après-midi';
-            }
+        // === DOM ELEMENTS ===
+        const els = {
+            clockTime: document.getElementById('clockTime'),
+            clockDate: document.getElementById('clockDate'),
+            greetingPrefix: document.getElementById('greetingPrefix'),
+            userNameDisplay: document.getElementById('userNameDisplay'),
+            weatherIcon: document.querySelector('.weather-icon'),
+            weatherTemp: document.querySelector('.weather-temp'),
+            weatherDesc: document.querySelector('.weather-desc'),
+            engineSelector: document.getElementById('engineSelector'),
+            engineDropdown: document.getElementById('engineDropdown'),
+            searchForm: document.getElementById('searchForm'),
+            searchInput: document.getElementById('searchInput'),
+            quickLinks: document.getElementById('quickLinks'),
+            hamburgerBtn: document.getElementById('hamburgerBtn'),
+            modalUser: document.getElementById('modalUser'),
+            modalLinks: document.getElementById('modalLinks'),
+            modalLinkForm: document.getElementById('modalLinkForm'),
+            nameInput: document.getElementById('nameInput'),
+            linksListManager: document.getElementById('linksListManager'),
+            linkNameInput: document.getElementById('linkNameInput'),
+            linkUrlInput: document.getElementById('linkUrlInput'),
+            linkIconInput: document.getElementById('linkIconInput'),
+            linkFormTitle: document.getElementById('linkFormTitle'),
+        };
 
-            // Récupérer le nom depuis localStorage
-            const userName = localStorage.getItem('userName');
-            const greetingElement = document.getElementById('greetingText');
-
-            if (userName) {
-                greetingElement.innerHTML = `${greeting}, <span class="user-name">${userName}</span>`;
-            } else {
-                greetingElement.innerHTML = `${greeting}, <span class="user-placeholder-wrapper"><span class="user-name user-placeholder" id="userPlaceholder">{User}</span><span class="user-help-text">*Cliquez pour définir votre nom d'utilisateur</span></span>`;
-                // Ajout de l'écouteur de clic sur User
-                setTimeout(() => {
-                    const userPlaceholder = document.getElementById('userPlaceholder');
-                    if (userPlaceholder) {
-                        userPlaceholder.addEventListener('click', () => {
-                            modalOverlay.classList.add('active');
-                            nameInput.value = '';
-                            nameInput.focus();
-                        });
-                    }
-                }, 0);
-            }
+        // === UTILITAIRES ===
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+            const input = document.getElementById(id).querySelector('input');
+            if (input) setTimeout(() => input.focus(), 100);
         }
 
-        // Mettre à jour toutes les secondes
-        setInterval(updateClock, 1000);
-        updateClock();
+        // === HORLOGE & DATE ===
+        function updateTime() {
+            const now = new Date();
+            els.clockTime.textContent = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+            els.clockDate.textContent = now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+            
+            const h = now.getHours();
+            let greet = 'Bonsoir';
+            if (h >= 6 && h < 12) greet = 'Bonjour';
+            else if (h >= 12 && h < 18) greet = 'Bon après-midi';
 
-        // === GESTION DU NOM (MODAL) ===
-        const hamburgerBtn = document.getElementById('hamburgerBtn');
-        const modalOverlay = document.getElementById('modalOverlay');
-        const modalClose = document.getElementById('modalClose');
-        const modalSave = document.getElementById('modalSave');
-        const nameInput = document.getElementById('nameInput');
+            els.greetingPrefix.textContent = `${greet}, `;
 
-        hamburgerBtn.addEventListener('click', () => {
-            modalOverlay.classList.add('active');
-            nameInput.value = localStorage.getItem('userName') || '';
-            nameInput.focus();
-        });
-
-        modalClose.addEventListener('click', () => {
-            modalOverlay.classList.remove('active');
-        });
-
-        modalOverlay.addEventListener('click', (e) => {
-            if (e.target === modalOverlay) {
-                modalOverlay.classList.remove('active');
-            }
-        });
-
-        modalSave.addEventListener('click', () => {
-            const name = nameInput.value.trim();
-            if (name) {
-                localStorage.setItem('userName', name);
-            } else {
-                localStorage.removeItem('userName');
-            }
-            updateClock();
-            modalOverlay.classList.remove('active');
-        });
-
-        nameInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                modalSave.click();
-            }
-        });
+            const userName = localStorage.getItem('userName');
+            els.userNameDisplay.textContent = userName || '{User}';
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
 
         // === MÉTÉO ===
-        function getWeatherIcon(weatherCode) {
-            // Codes météo Open-Meteo
-            if (weatherCode === 0) return 'fa-sun'; // Clair
-            if (weatherCode <= 3) return 'fa-cloud-sun'; // Partiellement nuageux
-            if (weatherCode <= 48) return 'fa-cloud'; // Nuageux/Brouillard
-            if (weatherCode <= 67) return 'fa-cloud-rain'; // Pluie
-            if (weatherCode <= 77) return 'fa-snowflake'; // Neige
-            if (weatherCode <= 82) return 'fa-cloud-showers-heavy'; // Averses
-            if (weatherCode <= 86) return 'fa-cloud-snow'; // Neige
-            return 'fa-bolt'; // Orage
+        function updateWeather() {
+            if (!navigator.geolocation) return;
+            navigator.geolocation.getCurrentPosition(
+                pos => {
+                    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&current_weather=true`)
+                        .then(r => r.json())
+                        .then(d => {
+                            const code = d.current_weather.weathercode;
+                            const temp = Math.round(d.current_weather.temperature);
+                            els.weatherTemp.textContent = `${temp}°C`;
+                            let icon = 'fa-cloud', desc = 'Nuageux';
+                            if (code === 0) { icon = 'fa-sun'; desc = 'Ensoleillé'; }
+                            else if (code <= 3) { icon = 'fa-cloud-sun'; desc = 'Peu nuageux'; }
+                            else if (code <= 48) { icon = 'fa-smog'; desc = 'Brouillard'; }
+                            else if (code <= 67) { icon = 'fa-cloud-rain'; desc = 'Pluie'; }
+                            else if (code <= 77) { icon = 'fa-snowflake'; desc = 'Neige'; }
+                            else if (code <= 82) { icon = 'fa-cloud-showers-heavy'; desc = 'Averses'; }
+                            els.weatherIcon.className = `weather-icon fas ${icon}`;
+                            els.weatherDesc.textContent = desc;
+                        });
+                },
+                () => els.weatherDesc.textContent = 'GPS Off'
+            );
+        }
+        updateWeather();
+
+        // === GESTION DES LIENS ===
+        function renderQuickLinks() {
+            els.quickLinks.innerHTML = '';
+            myLinks.forEach(link => {
+                const a = document.createElement('a');
+                a.href = link.url;
+                a.className = 'quick-link';
+                a.target = '_blank';
+                a.innerHTML = `
+                    <div class="link-icon"><i class="${link.icon}"></i></div>
+                    <span class="link-name">${link.name}</span>
+                `;
+                els.quickLinks.appendChild(a);
+            });
+            localStorage.setItem('myLinks', JSON.stringify(myLinks));
         }
 
-        function getWeatherDesc(weatherCode) {
-            if (weatherCode === 0) return 'Ensoleillé';
-            if (weatherCode <= 3) return 'Partiellement nuageux';
-            if (weatherCode <= 48) return 'Nuageux';
-            if (weatherCode <= 67) return 'Pluvieux';
-            if (weatherCode <= 77) return 'Neigeux';
-            if (weatherCode <= 82) return 'Averses';
-            if (weatherCode <= 86) return 'Neige';
-            return 'Orageux';
+        function renderLinksManager() {
+            els.linksListManager.innerHTML = '';
+            myLinks.forEach((link, index) => {
+                const div = document.createElement('div');
+                div.className = 'link-item-manager';
+                div.innerHTML = `
+                    <div class="link-info">
+                        <i class="${link.icon}"></i>
+                        <span>${link.name}</span>
+                    </div>
+                    <div class="link-actions">
+                        <button class="action-btn" onclick="moveLink(${index}, -1)" title="Monter"><i class="fas fa-chevron-up"></i></button>
+                        <button class="action-btn" onclick="moveLink(${index}, 1)" title="Descendre"><i class="fas fa-chevron-down"></i></button>
+                        <button class="action-btn" onclick="editLink(${index})" title="Modifier"><i class="fas fa-pen"></i></button>
+                        <button class="action-btn delete" onclick="deleteLink(${index})" title="Supprimer"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+                els.linksListManager.appendChild(div);
+            });
         }
 
-        function fetchWeather() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const lat = position.coords.latitude;
-                        const lon = position.coords.longitude;
-                        
-                        fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`)
-                            .then(response => response.json())
-                            .then(data => {
-                                const temp = Math.round(data.current_weather.temperature);
-                                const weatherCode = data.current_weather.weathercode;
-                                
-                                document.querySelector('.weather-temp').textContent = `${temp}°C`;
-                                document.querySelector('.weather-desc').textContent = getWeatherDesc(weatherCode);
-                                document.querySelector('.weather-icon').className = `weather-icon fas ${getWeatherIcon(weatherCode)}`;
-                            })
-                            .catch(error => {
-                                console.error('Erreur météo:', error);
-                                document.querySelector('.weather-temp').textContent = '--°C';
-                                document.querySelector('.weather-desc').textContent = 'Non disponible';
-                            });
-                    },
-                    (error) => {
-                        console.error('Géolocalisation refusée:', error);
-                        document.querySelector('.weather-temp').textContent = '--°C';
-                        document.querySelector('.weather-desc').textContent = 'Non disponible';
-                    }
-                );
-            } else {
-                document.querySelector('.weather-temp').textContent = '--°C';
-                document.querySelector('.weather-desc').textContent = 'Non disponible';
+        window.moveLink = (index, direction) => {
+            if (direction === -1 && index > 0) {
+                [myLinks[index], myLinks[index - 1]] = [myLinks[index - 1], myLinks[index]];
+            } else if (direction === 1 && index < myLinks.length - 1) {
+                [myLinks[index], myLinks[index + 1]] = [myLinks[index + 1], myLinks[index]];
             }
-        }
+            renderQuickLinks();
+            renderLinksManager();
+        };
 
-        fetchWeather();
+        window.deleteLink = (index) => {
+            if(confirm('Supprimer ce lien ?')) {
+                myLinks.splice(index, 1);
+                renderQuickLinks();
+                renderLinksManager();
+            }
+        };
+
+        window.editLink = (index) => {
+            const link = myLinks[index];
+            editingLinkId = index;
+            els.linkFormTitle.textContent = "Modifier le lien";
+            els.linkNameInput.value = link.name;
+            els.linkUrlInput.value = link.url;
+            els.linkIconInput.value = link.icon;
+            closeModal('modalLinks');
+            openModal('modalLinkForm');
+        };
 
         // === RECHERCHE ===
-        const engineSelector = document.getElementById('engineSelector');
-        const engineDropdown = document.getElementById('engineDropdown');
-        const searchForm = document.getElementById('searchForm');
-        const searchInput = document.getElementById('searchInput');
-
-        // Toggle dropdown
-        engineSelector.addEventListener('click', (e) => {
+        els.engineSelector.addEventListener('click', (e) => {
             e.stopPropagation();
-            engineDropdown.classList.toggle('active');
+            els.engineDropdown.classList.toggle('active');
         });
+        document.addEventListener('click', () => els.engineDropdown.classList.remove('active'));
 
-        // Fermer dropdown en cliquant ailleurs
-        document.addEventListener('click', () => {
-            engineDropdown.classList.remove('active');
-        });
-
-        // Sélection du moteur
-        document.querySelectorAll('.engine-option').forEach(option => {
-            option.addEventListener('click', (e) => {
+        document.querySelectorAll('.engine-option').forEach(opt => {
+            opt.addEventListener('click', (e) => {
                 e.stopPropagation();
-                
-                const engine = option.dataset.engine;
-                const url = option.dataset.url;
-                const icon = option.querySelector('i').className;
-                const name = option.querySelector('span').textContent;
-                
-                // Mettre à jour l'interface
-                document.querySelector('.engine-icon').className = `engine-icon ${icon}`;
-                document.querySelector('.engine-name').textContent = name;
-                engineSelector.setAttribute('data-engine', engine);
-                currentEngineUrl = url;
-                
-                // Fermer le dropdown
-                engineDropdown.classList.remove('active');
+                currentEngine = opt.dataset.url;
+                els.engineSelector.querySelector('.engine-icon').className = `engine-icon ${opt.dataset.icon}`;
+                els.engineSelector.querySelector('.engine-name').textContent = opt.querySelector('span').textContent;
+                els.engineDropdown.classList.remove('active');
             });
         });
 
-        // Soumission du formulaire
-        searchForm.addEventListener('submit', (e) => {
+        els.searchForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const query = searchInput.value.trim();
-            
-            if (query) {
-                window.location.href = currentEngineUrl + encodeURIComponent(query);
+            const q = els.searchInput.value.trim();
+            if(q) window.location.href = currentEngine + encodeURIComponent(q);
+        });
+
+        // === GESTION DES MODALS ===
+        els.userNameDisplay.addEventListener('click', () => {
+            els.nameInput.value = localStorage.getItem('userName') || '';
+            openModal('modalUser');
+        });
+
+        els.hamburgerBtn.addEventListener('click', () => {
+            els.nameInput.value = localStorage.getItem('userName') || '';
+            openModal('modalUser');
+        });
+
+        document.getElementById('manageLinksBtn').addEventListener('click', () => {
+            closeModal('modalUser');
+            renderLinksManager();
+            openModal('modalLinks');
+        });
+
+        document.getElementById('addLinkBtn').addEventListener('click', () => {
+            editingLinkId = null;
+            els.linkFormTitle.textContent = "Ajouter un lien";
+            els.linkNameInput.value = '';
+            els.linkUrlInput.value = '';
+            els.linkIconInput.value = 'fas fa-star';
+            closeModal('modalLinks');
+            openModal('modalLinkForm');
+        });
+
+        document.querySelectorAll('.modal-close').forEach(btn => {
+            btn.addEventListener('click', () => closeModal(btn.dataset.target));
+        });
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                if(e.target === overlay) closeModal(overlay.id);
+            });
+        });
+
+        document.getElementById('saveNameBtn').addEventListener('click', () => {
+            const val = els.nameInput.value.trim();
+            val ? localStorage.setItem('userName', val) : localStorage.removeItem('userName');
+            updateTime();
+            closeModal('modalUser');
+        });
+
+        document.getElementById('saveLinkBtn').addEventListener('click', () => {
+            const newLink = {
+                id: Date.now(),
+                name: els.linkNameInput.value.trim() || 'Sans nom',
+                url: els.linkUrlInput.value.trim() || '#',
+                icon: els.linkIconInput.value.trim() || 'fas fa-link'
+            };
+            if (editingLinkId !== null) {
+                myLinks[editingLinkId] = { ...newLink, id: myLinks[editingLinkId].id };
+            } else {
+                myLinks.push(newLink);
             }
+            renderQuickLinks();
+            closeModal('modalLinkForm');
+            openModal('modalLinks');
+            renderLinksManager();
         });
-    </script>
-    <!-- Désactive le menu clic droit -->
-    <script>
-        // Désactive le menu clic droit
-        window.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
-        // Désactive Ctrl+A et sélection
-        window.addEventListener('keydown', function(e) {
-            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'a') {
+
+        renderQuickLinks();
+
+        // === SÉCURITÉ ===
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if (e.key === 'F12' || 
+                (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'i') ||
+                (e.ctrlKey && e.key.toLowerCase() === 'u') ||
+                (e.ctrlKey && e.key.toLowerCase() === 'a')) {
                 e.preventDefault();
             }
-            // Désactive F12 et Ctrl+Shift+I
-            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'i')) {
-                e.preventDefault();
-            }
-        });
-        // Désactive le drag & drop
-        window.addEventListener('dragover', function(e) {
-            e.preventDefault();
-        });
-        window.addEventListener('drop', function(e) {
-            e.preventDefault();
-        });
-        // Désactive la sélection du texte
-        window.addEventListener('selectstart', function(e) {
-            e.preventDefault();
         });
     </script>
 </body>
