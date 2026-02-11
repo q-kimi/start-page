@@ -136,7 +136,6 @@
 
         .hamburger-btn:hover {
             color: var(--text-primary);
-            transform: rotate(90deg);
         }
 
         /* === MAIN CONTENT === */
@@ -725,10 +724,12 @@
             // Logique de salutation
             const hour = now.getHours();
             let greeting;
-            if (hour >= 18) {
+            if (hour >= 18 || hour < 6) {
                 greeting = 'Bonsoir';
-            } else {
+            } else if (hour < 12) {
                 greeting = 'Bonjour';
+            } else {
+                greeting = 'Bon après-midi';
             }
 
             // Récupérer le nom depuis localStorage
