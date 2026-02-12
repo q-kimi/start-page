@@ -1,43 +1,32 @@
-# Start Page - Extension de navigateur 🚀
 
-Une magnifique page de démarrage personnalisable pour votre navigateur avec horloge en temps réel, barre de recherche Google et raccourcis personnalisables.
+# Start Page - Page d'accueil web 🚀
 
-## ✨ Fonctionnalités
+Une magnifique page de démarrage personnalisable pour votre navigateur (page web locale) avec horloge en temps réel, barre de recherche multi-moteurs et raccourcis personnalisables.
 
-- **Horloge en temps réel** - Affichage de l'heure et de la date
-- **Message de salutation personnalisé** - Bonjour, bon après-midi ou bonsoir avec votre nom
-- **Barre de recherche intelligente** - Recherche Google ou navigation directe par URL
-- **Raccourcis personnalisables** - Accès rapide à vos sites favoris
-- **Thèmes multiples** - 5 arrière-plans différents au choix
-- **Design moderne** - Interface élégante avec effets de verre (glassmorphism)
-- **Responsive** - Fonctionne sur tous les écrans
-- **Stockage local** - Vos paramètres sont sauvegardés
+
+## ✨ Fonctionnalités présentes
+
+- **Horloge en temps réel** : Affichage de l'heure et de la date
+- **Message de salutation personnalisé** : Bonjour, bon après-midi ou bonsoir avec votre nom
+- **Barre de recherche multi-moteurs** : Recherche Google, Bing, Brave, Ecosia ou navigation directe par URL
+- **Détection automatique d'URL** dans la barre de recherche
+- **Raccourcis personnalisables** : Ajout, modification, suppression, réorganisation des liens rapides
+- **Gestionnaire de liens rapide** via une interface dédiée (modale)
+- **Météo géolocalisée** (Open-Meteo)
+- **Design moderne** : Interface élégante, responsive, animations et effets visuels
+- **Stockage local** : Sauvegarde automatique des préférences (nom, liens, moteur de recherche)
+- **Modals** pour la gestion du profil et des liens
+- **Service worker** pour extension Chrome (manifest V3)
+- **Scripts d'utilitaires** pour packaging et vérification des fichiers
 
 ## 📦 Installation
 
-### Chrome / Edge / Brave / Opera
+
+## 📦 Installation
 
 1. Téléchargez ou clonez ce projet
-2. Ouvrez votre navigateur et accédez à :
-   - **Chrome** : `chrome://extensions`
-   - **Edge** : `edge://extensions`
-   - **Brave** : `brave://extensions`
-   - **Opera** : `opera://extensions`
-
-3. Activez le **Mode développeur** (toggle en haut à droite)
-4. Cliquez sur **Charger l'extension non empaquetée**
-5. Sélectionnez le dossier du projet `start-page`
-6. L'extension est installée ! Ouvrez un nouvel onglet pour la voir en action
-
-### Firefox
-
-1. Téléchargez ou clonez ce projet
-2. Ouvrez Firefox et accédez à : `about:debugging#/runtime/this-firefox`
-3. Cliquez sur **Charger un module complémentaire temporaire**
-4. Sélectionnez le fichier `manifest.json` dans le dossier du projet
-5. L'extension est installée ! Ouvrez un nouvel onglet
-
-**Note Firefox** : Pour une installation permanente, vous devrez signer l'extension via [addons.mozilla.org](https://addons.mozilla.org/developers/)
+2. Ouvrez le fichier `index.html` dans votre navigateur (double-clic ou clic droit > ouvrir avec...)
+3. (Optionnel) Hébergez le dossier sur un serveur local pour accéder à la page depuis n'importe quel appareil du réseau
 
 ## 🎨 Personnalisation
 
@@ -48,64 +37,46 @@ Une magnifique page de démarrage personnalisable pour votre navigateur avec hor
    - **Raccourcis** : ajoutez, modifiez ou supprimez vos favoris
 3. Cliquez sur **Enregistrer**
 
-## 🚀 Déploiement en production
 
-### Chrome Web Store
+## 🚀 Déploiement
 
-1. Créez un compte développeur sur [Chrome Web Store](https://chrome.google.com/webstore/devconsole/)
-2. Préparez les assets requis :
-   - Captures d'écran (1280x800 ou 640x400)
-   - Icône promotionnelle 440x280
-   - Description détaillée
-3. Créez un fichier ZIP du dossier du projet
-4. Soumettez l'extension pour révision
-5. Frais unique de 5$ USD requis
+Vous pouvez héberger la page sur un serveur web (local ou distant) ou l'utiliser directement en ouvrant le fichier `index.html` dans votre navigateur. Aucun store ou marketplace n'est nécessaire.
 
-### Firefox Add-ons
-
-1. Créez un compte sur [addons.mozilla.org](https://addons.mozilla.org/developers/)
-2. Créez un fichier ZIP du projet
-3. Soumettez pour révision
-4. Gratuit, pas de frais
-
-### Microsoft Edge Add-ons
-
-1. Créez un compte sur [Microsoft Partner Center](https://partner.microsoft.com/)
-2. Suivez les mêmes étapes que Chrome
-3. Frais unique de 9$ USD requis
 
 ## 📁 Structure du projet
 
 ```
 start-page/
-├── manifest.json          # Configuration de l'extension
 ├── index.html            # Page principale
 ├── styles.css            # Styles et thèmes
 ├── script.js             # Logique JavaScript
-├── background.js         # Service worker
-├── icons/                # Icônes de l'extension
+├── icons/                # Icônes SVG
 │   ├── icon16.svg
 │   ├── icon48.svg
 │   └── icon128.svg
-└── README.md            # Ce fichier
+├── README.md             # Ce fichier
+├── server.js             # Serveur local (optionnel)
+├── tools.ps1             # Script d'utilitaires (optionnel)
+├── LICENSE
+├── CHANGELOG.md
+├── PACKAGING.md
 ```
+
 
 ## 🛠️ Technologies utilisées
 
 - **HTML5** - Structure
 - **CSS3** - Design moderne avec glassmorphism
 - **JavaScript (Vanilla)** - Logique sans framework
-- **Chrome Extension API** - Intégration navigateur
 - **LocalStorage** - Sauvegarde des paramètres
+
 
 ## 🔧 Développement
 
-Pour modifier l'extension :
+Pour modifier la page :
 
 1. Modifiez les fichiers selon vos besoins
-2. Rechargez l'extension dans votre navigateur :
-   - Chrome : Cliquez sur l'icône de rechargement dans `chrome://extensions`
-   - Firefox : Rechargez depuis `about:debugging`
+2. Rechargez la page dans votre navigateur (F5)
 3. Testez les modifications
 
 ## 📝 Raccourcis par défaut
@@ -157,4 +128,4 @@ Pour toute question ou problème, créez une issue dans le dépôt du projet.
 
 ---
 
-**Profitez de votre nouvelle page de démarrage ! 🎉**
+**Profitez de votre nouvelle page d'accueil personnalisée ! 🎉**
