@@ -3,283 +3,350 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nouvelle Page</title>
+    <title>Dashboard</title>
     
-    <!-- Google Fonts - Inter -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     
-    <!-- FontAwesome 6.4.0 -->
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* === VARIABLES CSS (Strict Theme) === */
         :root {
-            /* Palette de couleurs */
             --bg-gradient-start: #1f1f2e;
             --bg-gradient-end: #0f0f12;
             --bg-main: #0f0f12;
-            
             --surface-color: #1e1e24;
             --surface-hover: #2a2a35;
-            
             --text-primary: #ffffff;
             --text-secondary: #a1a1aa;
-            
             --accent-color: #6366f1;
             --accent-hover: #818cf8;
-            
             --danger-color: #ef4444;
-            
             --border-radius: 16px;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* === RESET & BASE === */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            outline: none;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
+        
         body {
             font-family: 'Inter', sans-serif;
             background: radial-gradient(circle at 50% 0%, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 70%);
             background-color: var(--bg-main);
             color: var(--text-primary);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
+            height: 100vh;
+            overflow: hidden; /* Prevents scrollbars if content overflows slightly */
             user-select: none;
-            -webkit-user-select: none;
         }
 
-        input { user-select: text !important; -webkit-user-select: text !important; }
-
-        /* === HEADER === */
+        /* === HEADER (FIXED) === */
         header {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            padding: 25px 40px;
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            padding: 25px 40px;
-            width: 100%;
             z-index: 10;
+            pointer-events: none; /* Allows clicks to pass through empty space */
+        }
+
+        .header-left, .header-right {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            pointer-events: auto; /* Re-enables clicks on widgets */
+        }
+
+        .widget-card {
+            background: rgba(30, 30, 36, 0.6);
+            backdrop-filter: blur(12px);
+            border-radius: var(--border-radius);
+            padding: 15px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
+            width: 320px; /* Fixed width for stability */
         }
 
         .weather-widget {
             display: flex;
             align-items: center;
             gap: 12px;
-            background: rgba(30, 30, 36, 0.6);
-            backdrop-filter: blur(12px);
-            border-radius: var(--border-radius);
-            padding: 12px 20px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: var(--transition);
         }
-        .weather-widget:hover { background: rgba(30, 30, 36, 0.9); border-color: rgba(255, 255, 255, 0.1); }
         .weather-icon { font-size: 1.6rem; color: var(--accent-color); }
         .weather-info { display: flex; flex-direction: column; line-height: 1.2; }
-        .weather-temp { font-size: 1.1rem; font-weight: 500; color: var(--text-primary); }
-        .weather-desc { font-size: 0.8rem; color: var(--text-secondary); text-transform: capitalize; }
+        .weather-temp { font-size: 1.1rem; font-weight: 500; }
+        .weather-desc { font-size: 0.8rem; color: var(--text-secondary); }
 
-        .header-right { display: flex; align-items: center; gap: 20px; }
-        .clock-widget { text-align: right; }
-        .clock-time { font-size: 2.2rem; font-weight: 300; color: var(--text-primary); line-height: 1; letter-spacing: -1px; }
-        .clock-date { font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px; }
-
-        .hamburger-btn {
-            background: var(--surface-color);
-            border: 1px solid rgba(255,255,255,0.05);
-            color: var(--text-secondary);
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            cursor: pointer;
+        /* Calendar */
+        .calendar-header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            transition: var(--transition);
+            margin-bottom: 15px;
         }
-        .hamburger-btn:hover { background: var(--surface-hover); color: var(--text-primary); transform: translateY(-2px); }
+        .calendar-title { font-weight: 500; font-size: 0.95rem; }
+        .calendar-nav { display: flex; gap: 5px; }
+        .calendar-nav button {
+            background: transparent; border: none; color: var(--text-secondary);
+            cursor: pointer; padding: 5px 8px; border-radius: 6px; transition: var(--transition);
+        }
+        .calendar-nav button:hover { background: rgba(255,255,255,0.1); color: var(--text-primary); }
 
-        /* === MAIN CONTENT === */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            text-align: center;
+        }
+        .calendar-day-name { font-size: 0.7rem; color: var(--text-secondary); padding-bottom: 5px; font-weight: 500; }
+        .calendar-day {
+            width: 100%; aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+            font-size: 0.8rem; border-radius: 8px; cursor: pointer; color: var(--text-secondary);
+            position: relative; transition: var(--transition);
+        }
+        .calendar-day:hover { background: var(--surface-hover); color: var(--text-primary); }
+        .calendar-day.today { color: var(--text-primary); font-weight: 600; background: rgba(99, 102, 241, 0.2); }
+        .calendar-day.other-month { opacity: 0.3; pointer-events: none; }
+        .calendar-day.has-event::after {
+            content: ''; position: absolute; bottom: 2px; width: 4px; height: 4px;
+            background: var(--accent-color); border-radius: 50%;
+        }
+        .calendar-day.selected { box-shadow: inset 0 0 0 1.5px var(--accent-color); }
+
+        /* Event Panel (Slides down under calendar) */
+        .event-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, opacity 0.3s ease, margin-top 0.3s ease;
+            opacity: 0;
+            margin-top: 0;
+        }
+        .event-panel.active {
+            max-height: 400px;
+            opacity: 1;
+            margin-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 10px;
+        }
+        .event-panel-header { font-size: 0.9rem; color: var(--text-primary); margin-bottom: 10px; font-weight: 500; }
+        .event-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; max-height: 150px; overflow-y: auto; }
+        .event-item {
+            display: flex; justify-content: space-between; align-items: center; padding: 8px;
+            background: rgba(255,255,255,0.05); border-radius: 6px; font-size: 0.8rem;
+        }
+        .event-item-info { display: flex; flex-direction: column; }
+        .event-item-title { font-weight: 500; color: var(--text-primary); }
+        .event-item-time { font-size: 0.7rem; color: var(--text-secondary); }
+        
+        /* Form inputs inside widget */
+        .widget-input {
+            width: 100%; padding: 8px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 6px; color: var(--text-primary); font-size: 0.8rem; margin-bottom: 8px; font-family: 'Inter';
+        }
+        .widget-input:focus { border-color: var(--accent-color); }
+        .btn-add-event {
+            width: 100%; padding: 8px; background: var(--accent-color); border: none;
+            border-radius: 6px; color: white; font-size: 0.8rem; cursor: pointer; transition: var(--transition);
+        }
+        .btn-add-event:hover { background: var(--accent-hover); }
+
+        /* Header Right */
+        .header-right { align-items: flex-end; }
+        .clock-widget { text-align: right; }
+        .clock-time { font-size: 2.2rem; font-weight: 300; line-height: 1; letter-spacing: -1px; }
+        .clock-date { font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px; }
+        .hamburger-btn {
+            background: var(--surface-color); border: 1px solid rgba(255,255,255,0.05);
+            color: var(--text-secondary); width: 42px; height: 42px; border-radius: 12px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+            transition: var(--transition); margin-top: 10px;
+        }
+        .hamburger-btn:hover { background: var(--surface-hover); color: var(--text-primary); }
+
+        /* === MAIN CONTENT (FIXED CENTER) === */
         main {
-            flex: 1;
+            position: relative;
+            height: 100vh;
+            width: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            width: 100%;
-        }
-
-        .greeting-container { 
-            text-align: center; 
-            margin-bottom: 40px; 
-            animation: fadeIn 0.8s ease-out; 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .greeting-text { 
-            font-size: 2rem; 
-            font-weight: 300; 
-            color: var(--text-primary);
+            z-index: 1;
+            pointer-events: none; /* Clicks pass through to background */
         }
         
-        .user-name {
-            font-weight: 500;
-            color: var(--accent-color);
-            cursor: pointer;
-        }
+        /* Re-enable clicks for interactive elements inside main */
+        .greeting-container, .search-wrapper, .quick-links-container { pointer-events: auto; }
 
-        .search-wrapper { width: 100%; max-width: 650px; margin-bottom: 60px; position: relative; z-index: 100; animation: slideUp 0.8s ease-out 0.2s forwards; }
+        .greeting-container { text-align: center; margin-bottom: 40px; animation: fadeIn 1s ease-out; }
+        .greeting-text { font-size: 2rem; font-weight: 300; }
+        .user-name { font-weight: 500; color: var(--accent-color); cursor: pointer; transition: var(--transition); }
+        .user-name:hover { opacity: 0.8; }
+
+        /* Search */
+        .search-wrapper { width: 100%; max-width: 650px; margin-bottom: 60px; animation: slideUp 0.8s ease-out; }
         .search-form {
-            display: flex;
-            align-items: center;
-            background: var(--surface-color);
-            border-radius: 50px;
-            padding: 8px 8px 8px 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: var(--transition);
+            display: flex; align-items: center; background: var(--surface-color); border-radius: 50px;
+            padding: 8px 8px 8px 20px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05); transition: var(--transition);
         }
         .search-form:focus-within { box-shadow: 0 10px 50px rgba(99, 102, 241, 0.3); background: var(--surface-hover); }
 
         .engine-selector {
-            display: flex; align-items: center; gap: 8px; padding: 8px 12px; cursor: pointer; border-radius: 12px;
-            transition: var(--transition); margin-right: 12px; border-right: 1px solid rgba(255,255,255,0.05);
+            display: flex; align-items: center; gap: 8px; padding: 8px 12px; cursor: pointer;
+            border-radius: 12px; transition: var(--transition); margin-right: 12px;
+            border-right: 1px solid rgba(255,255,255,0.05); position: relative;
         }
         .engine-selector:hover { background: rgba(255,255,255,0.05); }
-        .engine-icon { font-size: 1rem; color: var(--text-primary); }
-        .engine-arrow { font-size: 0.7rem; color: var(--text-secondary); margin-left: 4px; }
-
+        
         .engine-dropdown {
-            display: none; position: absolute; top: 110%; left: 0; background: var(--bg-main); border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); overflow: hidden; min-width: 180px; z-index: 1000;
-            opacity: 0; transform: translateY(-10px); transition: var(--transition);
+            position: absolute; top: 120%; left: 0; background: var(--bg-main);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); overflow: hidden; min-width: 180px; z-index: 1000;
+            opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.2s ease;
         }
-        .engine-dropdown.active { display: block; opacity: 1; transform: translateY(0); }
-        .engine-option {
-            display: flex; align-items: center; gap: 10px; padding: 12px 16px; cursor: pointer; color: var(--text-secondary); transition: var(--transition);
-        }
+        .engine-dropdown.active { opacity: 1; visibility: visible; transform: translateY(0); }
+        .engine-option { display: flex; align-items: center; gap: 10px; padding: 12px 16px; cursor: pointer; color: var(--text-secondary); transition: var(--transition); }
         .engine-option:hover { background: var(--surface-hover); color: var(--text-primary); }
-        /* Suppression des couleurs spécifiques pour les icônes des moteurs de recherche */
 
-        .search-input { flex: 1; background: transparent; border: none; color: var(--text-primary); font-size: 1rem; font-family: 'Inter', sans-serif; padding: 8px; }
+        .search-input { flex: 1; background: transparent; border: none; color: var(--text-primary); font-size: 1rem; font-family: 'Inter'; padding: 8px; }
         .search-input::placeholder { color: var(--text-secondary); }
         .search-btn {
-            width: 45px; height: 45px; border-radius: 50%; background: var(--accent-color); border: none; color: white; font-size: 1rem;
-            cursor: pointer; display: flex; align-items: center; justify-content: center; transition: var(--transition);
+            width: 45px; height: 45px; border-radius: 50%; background: var(--accent-color); border: none;
+            color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: var(--transition);
         }
         .search-btn:hover { background: var(--accent-hover); transform: scale(1.05); }
 
-        .quick-links-container { width: 100%; display: flex; flex-direction: column; align-items: center; animation: slideUp 0.8s ease-out 0.4s forwards; }
+        /* Quick Links */
+        .quick-links-container { width: 100%; display: flex; flex-direction: column; align-items: center; }
         .quick-links { display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; }
         .quick-link {
-            display: flex; flex-direction: column; align-items: center; gap: 10px; text-decoration: none; color: var(--text-primary); transition: var(--transition);
+            display: flex; flex-direction: column; align-items: center; gap: 10px; text-decoration: none;
+            color: var(--text-primary); transition: var(--transition); animation: fadeInUp 0.5s ease-out forwards; opacity: 0;
         }
         .quick-link:hover { transform: translateY(-5px); }
         .link-icon {
-            width: 55px; height: 55px; background: var(--surface-color); border-radius: 14px; display: flex; align-items: center; justify-content: center;
-            font-size: 1.4rem; transition: var(--transition); border: 1px solid rgba(255,255,255,0.02);
+            width: 55px; height: 55px; background: var(--surface-color); border-radius: 14px;
+            display: flex; align-items: center; justify-content: center; font-size: 1.4rem;
+            transition: var(--transition); border: 1px solid rgba(255,255,255,0.02);
         }
-        .quick-link:hover .link-icon {
-            background: var(--surface-hover); box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3); border-color: rgba(99, 102, 241, 0.3);
-        }
+        .quick-link:hover .link-icon { background: var(--surface-hover); box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3); border-color: rgba(99, 102, 241, 0.3); }
         .link-name { font-size: 0.85rem; color: var(--text-secondary); }
 
         /* === MODALS === */
         .modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(10px); z-index: 2000; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease;
+            display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(8px); z-index: 2000;
+            align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.3s ease;
         }
-        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
         .modal-content {
-            background: var(--surface-color); border-radius: var(--border-radius); padding: 30px; max-width: 450px; width: 90%;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); border: 1px solid rgba(255,255,255,0.05); transform: scale(0.96) translateY(20px);
-            transition: var(--transition); position: relative;
+            background: var(--surface-color); border-radius: var(--border-radius); padding: 30px;
+            max-width: 450px; width: 90%; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255,255,255,0.05);
+            transform: scale(0.9) translateY(20px); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .modal-title { font-size: 1.3rem; font-weight: 500; color: var(--text-primary); }
+        
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-title { font-size: 1.2rem; font-weight: 500; }
         .modal-close {
-            background: transparent; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer; transition: var(--transition);
+            background: transparent; border: none; color: var(--text-secondary); font-size: 1.2rem;
+            cursor: pointer; padding: 5px; display: flex; align-items: center; justify-content: center;
         }
-        .modal-close:hover { color: var(--text-primary); }
+        /* DEMANDE: Pas d'animation superflue sur la croix */
+        .modal-close:hover { color: var(--text-primary); } 
+
         .modal-input {
-            width: 100%; padding: 12px; background: var(--bg-main); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: var(--text-primary);
-            font-size: 1rem; font-family: 'Inter', sans-serif; margin-bottom: 20px; outline: none; transition: var(--transition);
+            width: 100%; padding: 12px; background: var(--bg-main); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px; color: var(--text-primary); font-size: 0.95rem; font-family: 'Inter';
+            margin-bottom: 15px; transition: border-color 0.2s;
         }
         .modal-input:focus { border-color: var(--accent-color); }
-        .modal-btn {
-            width: 100%; padding: 12px; background: var(--accent-color); border: none; border-radius: 8px; color: white; font-size: 1rem;
-            font-weight: 500; cursor: pointer; transition: var(--transition);
+        
+        .btn-primary {
+            width: 100%; padding: 12px; background: var(--accent-color); border: none; border-radius: 8px;
+            color: white; font-size: 0.95rem; font-weight: 500; cursor: pointer; transition: var(--transition);
         }
-        .modal-btn:hover { background: var(--accent-hover); }
-
-        /* Bouton Secondaire (Gestion Liens) */
-        .modal-secondary-btn {
-            width: 100%; padding: 10px; background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); border-radius: 8px;
-            cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 8px; transition: var(--transition);
-            margin-top: 15px;
+        .btn-primary:hover { background: var(--accent-hover); }
+        
+        .btn-secondary {
+            background: transparent; border: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary);
+            padding: 10px; border-radius: 8px; cursor: pointer; transition: var(--transition);
+            width: 100%; margin-top: 10px;
         }
-        .modal-secondary-btn:hover { background: rgba(99, 102, 241, 0.1); }
+        .btn-secondary:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); }
 
-        /* === LINKS MANAGER === */
-        .links-list { max-height: 300px; overflow-y: auto; margin-bottom: 20px; padding-right: 5px; }
-        .links-list::-webkit-scrollbar { width: 6px; }
-        .links-list::-webkit-scrollbar-thumb { background: var(--surface-hover); border-radius: 3px; }
+        .links-list { max-height: 250px; overflow-y: auto; margin-bottom: 20px; }
         .link-item-manager {
-            display: flex; align-items: center; justify-content: space-between; padding: 10px; background: rgba(255,255,255,0.03); border-radius: 8px;
-            margin-bottom: 8px; border: 1px solid transparent; transition: var(--transition);
+            display: flex; align-items: center; justify-content: space-between; padding: 12px;
+            background: rgba(255,255,255,0.03); border-radius: 8px; margin-bottom: 8px; transition: var(--transition);
         }
-        .link-item-manager:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.05); }
-        .link-info { display: flex; align-items: center; gap: 10px; flex: 1; }
-        .link-info i { color: var(--text-secondary); font-size: 1.1rem; }
-        .link-info span { font-size: 0.9rem; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px; }
+        .link-item-manager:hover { background: rgba(255,255,255,0.06); }
+        .link-info { display: flex; align-items: center; gap: 12px; }
+        .link-info i { font-size: 1.1rem; width: 20px; text-align: center; }
+        .link-info span { font-size: 0.9rem; }
         .link-actions { display: flex; gap: 5px; }
-        .action-btn { background: transparent; border: none; color: var(--text-secondary); cursor: pointer; padding: 5px; border-radius: 4px; transition: var(--transition); font-size: 0.9rem; }
+        .action-btn { background: transparent; border: none; color: var(--text-secondary); cursor: pointer; padding: 5px; border-radius: 4px; transition: var(--transition); }
         .action-btn:hover { background: rgba(255,255,255,0.1); color: var(--text-primary); }
-        .action-btn.delete:hover { background: rgba(239, 68, 68, 0.2); color: var(--danger-color); }
-        .add-link-btn {
-            width: 100%; padding: 10px; background: rgba(99, 102, 241, 0.1); color: var(--accent-color); border: 1px dashed var(--accent-color);
-            border-radius: 8px; cursor: pointer; font-weight: 500; transition: var(--transition);
-        }
-        .add-link-btn:hover { background: var(--accent-color); color: white; }
+        .action-btn.delete:hover { color: var(--danger-color); background: rgba(239, 68, 68, 0.1); }
 
-        /* === ANIMATIONS === */
+        /* Animations */
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* === RESPONSIVE === */
-        @media (max-width: 600px) {
-            header { flex-direction: column-reverse; padding: 20px; gap: 15px; }
-            .header-right { width: 100%; justify-content: space-between; }
-            .weather-widget { width: 100%; justify-content: center; }
-            .clock-widget { text-align: center; width: 100%; }
-            .greeting-text { font-size: 1.5rem; }
-            .search-wrapper { max-width: 95%; }
-            .quick-links { gap: 20px; }
-            .link-icon { width: 50px; height: 50px; font-size: 1.2rem; }
+        /* Responsive */
+        @media (max-width: 900px) {
+            header { flex-direction: column; align-items: center; gap: 15px; position: relative; height: auto; padding: 20px; pointer-events: auto; }
+            .header-left, .header-right { width: 100%; align-items: center; }
+            .widget-card { width: 100%; max-width: 400px; }
+            main { height: auto; margin-top: 20px; justify-content: flex-start; padding-top: 20px; position: relative; }
+            /* Note: On mobile, the "fixed center" requirement is relaxed to allow scrolling if needed */
         }
     </style>
 </head>
 <body>
 
-    <!-- Header -->
+    <!-- HEADER (Fixed Position) -->
     <header>
-        <div class="weather-widget" id="weatherWidget">
-            <i class="weather-icon fas fa-cloud"></i>
-            <div class="weather-info">
-                <div class="weather-temp">--°C</div>
-                <div class="weather-desc">Chargement...</div>
+        <div class="header-left">
+            <!-- Weather -->
+            <div class="widget-card weather-widget">
+                <i class="weather-icon fas fa-cloud"></i>
+                <div class="weather-info">
+                    <div class="weather-temp">--°C</div>
+                    <div class="weather-desc">Chargement...</div>
+                </div>
+            </div>
+
+            <!-- Calendar -->
+            <div class="widget-card" id="calendarWidget">
+                <div class="calendar-header">
+                    <span class="calendar-title" id="calendarTitle">Mois Année</span>
+                    <div class="calendar-nav">
+                        <button id="calPrev"><i class="fas fa-chevron-left"></i></button>
+                        <button id="calNext"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+                <div class="calendar-grid" id="calendarGrid"></div>
+                
+                <!-- Event Panel (Integrated) -->
+                <div class="event-panel" id="eventPanel">
+                    <div class="event-panel-header" id="eventPanelTitle">Événements</div>
+                    <div class="event-list" id="eventList"></div>
+                    <input type="text" class="widget-input" id="newEventTitle" placeholder="Titre de l'événement">
+                    <div style="display:flex; gap:8px; margin-bottom:8px;">
+                        <input type="time" class="widget-input" style="margin-bottom:0; flex:1;" id="newEventTime">
+                        <input type="text" class="widget-input" style="margin-bottom:0; flex:2;" id="newEventDesc" placeholder="Description">
+                    </div>
+                    <button class="btn-add-event" id="saveEventBtn"><i class="fas fa-plus"></i> Ajouter</button>
+                </div>
             </div>
         </div>
 
@@ -289,12 +356,12 @@
                 <div class="clock-date" id="clockDate">...</div>
             </div>
             <button class="hamburger-btn" id="hamburgerBtn" aria-label="Menu">
-                <i class="fas fa-bars"></i>
+                <i class="fas fa-cog"></i>
             </button>
         </div>
     </header>
 
-    <!-- Main Content -->
+    <!-- MAIN CONTENT (Fixed Center) -->
     <main>
         <div class="greeting-container">
             <h1 class="greeting-text">
@@ -308,20 +375,17 @@
                 <div class="engine-selector" id="engineSelector">
                     <i class="engine-icon fab fa-google"></i>
                     <span class="engine-name" style="font-size:0.9rem; font-weight:500; color:var(--text-secondary)">Google</span>
-                    <i class="engine-arrow fas fa-chevron-down"></i>
+                    <i class="engine-arrow fas fa-chevron-down" style="font-size:0.7rem; margin-left:5px; color:var(--text-secondary)"></i>
                     
                     <div class="engine-dropdown" id="engineDropdown">
-                        <div class="engine-option" data-engine="google" data-url="https://www.google.com/search?q=" data-icon="fab fa-google">
+                        <div class="engine-option" data-url="https://www.google.com/search?q=" data-icon="fab fa-google">
                             <i class="fab fa-google"></i> <span>Google</span>
                         </div>
-                        <div class="engine-option" data-engine="bing" data-url="https://www.bing.com/search?q=" data-icon="fab fa-microsoft">
+                        <div class="engine-option" data-url="https://www.bing.com/search?q=" data-icon="fab fa-microsoft">
                             <i class="fab fa-microsoft"></i> <span>Bing</span>
                         </div>
-                        <div class="engine-option" data-engine="brave" data-url="https://search.brave.com/search?q=" data-icon="fas fa-shield-halved">
+                        <div class="engine-option" data-url="https://search.brave.com/search?q=" data-icon="fas fa-shield-halved">
                             <i class="fas fa-shield-halved"></i> <span>Brave</span>
-                        </div>
-                        <div class="engine-option" data-engine="ecosia" data-url="https://www.ecosia.org/search?q=" data-icon="fas fa-leaf">
-                            <i class="fas fa-leaf"></i> <span>Ecosia</span>
                         </div>
                     </div>
                 </div>
@@ -332,69 +396,51 @@
         </div>
 
         <div class="quick-links-container">
-            <div class="quick-links" id="quickLinks">
-                <!-- Liens générés par JS -->
-            </div>
+            <div class="quick-links" id="quickLinks"></div>
         </div>
     </main>
 
-    <!-- Modal 1: Paramètres Utilisateur -->
-    <div class="modal-overlay" id="modalUser">
+    <!-- MODALS -->
+    <div class="modal-overlay" id="modalSettings">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Profil</h3>
-                <button class="modal-close" data-target="modalUser"><i class="fas fa-times"></i></button>
+                <h3 class="modal-title">Paramètres</h3>
+                <button class="modal-close" data-target="modalSettings"><i class="fas fa-times"></i></button>
             </div>
-            <input type="text" class="modal-input" id="nameInput" placeholder="Votre prénom..." maxlength="30">
-            <button class="modal-btn" id="saveNameBtn">Sauvegarder</button>
             
-            <!-- Bouton déplacé ici -->
-            <div style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
-                <button class="modal-secondary-btn" id="manageLinksBtn">
-                    <i class="fas fa-link"></i> Gérer mes liens rapides
-                </button>
-            </div>
+            <label style="font-size:0.85rem; color:var(--text-secondary); display:block; margin-bottom:5px;">Texte d'accueil (ex: Bonjour, Hello)</label>
+            <input type="text" class="modal-input" id="greetingInput" placeholder="Laisser vide pour auto (Bonjour/Soir)">
+            
+            <label style="font-size:0.85rem; color:var(--text-secondary); display:block; margin-bottom:5px;">Votre prénom</label>
+            <input type="text" class="modal-input" id="nameInput" placeholder="Ex: Alexandre">
+            <button class="btn-primary" id="saveNameBtn" style="margin-bottom:20px;">Sauvegarder le profil</button>
+            
+            <div style="border-top:1px solid rgba(255,255,255,0.1); margin:20px 0; padding-top:5px;"></div>
+            
+            <label style="font-size:0.85rem; color:var(--text-secondary); display:block; margin-bottom:10px;">Liens rapides</label>
+            <div class="links-list" id="linksListManager"></div>
+            <button class="btn-secondary" id="addLinkBtn"><i class="fas fa-plus"></i> Ajouter un lien</button>
         </div>
     </div>
 
-    <!-- Modal 2: Gestionnaire de Liens -->
-    <div class="modal-overlay" id="modalLinks">
-        <div class="modal-content" style="max-width: 500px;">
-            <div class="modal-header">
-                <h3 class="modal-title">Gérer mes liens</h3>
-                <button class="modal-close" data-target="modalLinks"><i class="fas fa-times"></i></button>
-            </div>
-            
-            <div class="links-list" id="linksListManager">
-                <!-- Liste des liens générée par JS -->
-            </div>
-
-            <button class="add-link-btn" id="addLinkBtn"><i class="fas fa-plus"></i> Ajouter un lien</button>
-        </div>
-    </div>
-
-    <!-- Modal 3: Ajouter / Modifier un lien -->
     <div class="modal-overlay" id="modalLinkForm">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title" id="linkFormTitle">Ajouter un lien</h3>
                 <button class="modal-close" data-target="modalLinkForm"><i class="fas fa-times"></i></button>
             </div>
-            
             <input type="text" class="modal-input" id="linkNameInput" placeholder="Nom (ex: Netflix)">
             <input type="text" class="modal-input" id="linkUrlInput" placeholder="URL (ex: https://netflix.com)">
-            <input type="text" class="modal-input" id="linkIconInput" placeholder="Classe Icone (ex: fas fa-play)">
-            <p style="font-size:0.75rem; color:var(--text-secondary); margin-bottom:15px; text-align:center;">
-                Trouvez des icônes sur <a href="https://fontawesome.com/search" target="_blank" style="color:var(--accent-color);">FontAwesome</a>
-            </p>
-            
-            <button class="modal-btn" id="saveLinkBtn">Valider</button>
+            <input type="text" class="modal-input" id="linkIconInput" placeholder="Icone FontAwesome (ex: fas fa-play)">
+            <button class="btn-primary" id="saveLinkBtn">Sauvegarder</button>
         </div>
     </div>
 
     <script>
-        // === VARIABLES ET DONNÉES ===
+        // === DATA PERSISTENCE ===
+        // All variables initialized from LocalStorage immediately
         let currentEngine = localStorage.getItem('currentEngine') || 'https://www.google.com/search?q=';
+        
         const defaultLinks = [
             { id: 1, name: 'Mail', url: 'https://gmail.com', icon: 'fas fa-envelope' },
             { id: 2, name: 'GitHub', url: 'https://github.com', icon: 'fab fa-github' },
@@ -402,100 +448,239 @@
             { id: 4, name: 'Twitter', url: 'https://twitter.com', icon: 'fab fa-twitter' }
         ];
         let myLinks = JSON.parse(localStorage.getItem('myLinks')) || defaultLinks;
+        
+        // Events structure: {'YYYY-MM-DD': [{title: '...', desc: '...', time: '...'}]}
+        let myEvents = JSON.parse(localStorage.getItem('myEvents')) || {};
+        
+        let currentDate = new Date();
+        let selectedDateKey = null;
         let editingLinkId = null;
 
         // === DOM ELEMENTS ===
+        const $ = id => document.getElementById(id);
         const els = {
-            clockTime: document.getElementById('clockTime'),
-            clockDate: document.getElementById('clockDate'),
-            greetingPrefix: document.getElementById('greetingPrefix'),
-            userNameDisplay: document.getElementById('userNameDisplay'),
-            weatherIcon: document.querySelector('.weather-icon'),
-            weatherTemp: document.querySelector('.weather-temp'),
-            weatherDesc: document.querySelector('.weather-desc'),
-            engineSelector: document.getElementById('engineSelector'),
-            engineDropdown: document.getElementById('engineDropdown'),
-            searchForm: document.getElementById('searchForm'),
-            searchInput: document.getElementById('searchInput'),
-            quickLinks: document.getElementById('quickLinks'),
-            hamburgerBtn: document.getElementById('hamburgerBtn'),
-            modalUser: document.getElementById('modalUser'),
-            modalLinks: document.getElementById('modalLinks'),
-            modalLinkForm: document.getElementById('modalLinkForm'),
-            nameInput: document.getElementById('nameInput'),
-            linksListManager: document.getElementById('linksListManager'),
-            linkNameInput: document.getElementById('linkNameInput'),
-            linkUrlInput: document.getElementById('linkUrlInput'),
-            linkIconInput: document.getElementById('linkIconInput'),
-            linkFormTitle: document.getElementById('linkFormTitle'),
+            clockTime: $('clockTime'), clockDate: $('clockDate'),
+            greetingPrefix: $('greetingPrefix'), userNameDisplay: $('userNameDisplay'),
+            weatherIcon: document.querySelector('.weather-icon'), weatherTemp: document.querySelector('.weather-temp'), weatherDesc: document.querySelector('.weather-desc'),
+            engineSelector: $('engineSelector'), engineDropdown: $('engineDropdown'), 
+            engineIconDisplay: document.querySelector('.engine-icon'), engineNameDisplay: document.querySelector('.engine-name'),
+            searchForm: $('searchForm'), searchInput: $('searchInput'),
+            quickLinks: $('quickLinks'),
+            calendarGrid: $('calendarGrid'), calendarTitle: $('calendarTitle'),
+            eventPanel: $('eventPanel'), eventList: $('eventList'), eventPanelTitle: $('eventPanelTitle'),
+            newEventTitle: $('newEventTitle'), newEventTime: $('newEventTime'), newEventDesc: $('newEventDesc'),
+            modalSettings: $('modalSettings'), modalLinkForm: $('modalLinkForm'),
+            nameInput: $('nameInput'), greetingInput: $('greetingInput'),
+            linksListManager: $('linksListManager'),
+            linkNameInput: $('linkNameInput'), linkUrlInput: $('linkUrlInput'), linkIconInput: $('linkIconInput'),
         };
 
-        // === UTILITAIRES ===
-        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-        function openModal(id) {
-            document.getElementById(id).classList.add('active');
-            const input = document.getElementById(id).querySelector('input');
-            if (input) setTimeout(() => input.focus(), 100);
-        }
+        // === UTILITIES ===
+        const closeModal = id => $(id).classList.remove('active');
+        const openModal = id => { $(id).classList.add('active'); const inp = $(id).querySelector('input'); if(inp) setTimeout(() => inp.focus(), 100); };
+        const formatDateKey = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 
-        // === HORLOGE & DATE ===
+        // === TIME & GREETING (PERSISTED) ===
         function updateTime() {
             const now = new Date();
             els.clockTime.textContent = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
             els.clockDate.textContent = now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
             
-            const h = now.getHours();
-            let greet = 'Bonsoir';
-            if (h >= 6 && h < 12) greet = 'Bonjour';
-            else if (h >= 12 && h < 18) greet = 'Bon après-midi';
+            // Load user name
+            els.userNameDisplay.textContent = localStorage.getItem('userName') || '{User}';
 
-            els.greetingPrefix.textContent = `${greet}, `;
-
-            const userName = localStorage.getItem('userName');
-            els.userNameDisplay.textContent = userName || '{User}';
+            // Load Custom Greeting or Default
+            const customGreeting = localStorage.getItem('customGreeting');
+            if (customGreeting) {
+                els.greetingPrefix.textContent = `${customGreeting}, `;
+            } else {
+                const h = now.getHours();
+                let greet = 'Bonsoir';
+                if (h >= 5 && h < 12) greet = 'Bonjour';
+                else if (h >= 12 && h < 18) greet = 'Bon après-midi';
+                els.greetingPrefix.textContent = `${greet}, `;
+            }
         }
         setInterval(updateTime, 1000);
         updateTime();
 
-        // === MÉTÉO ===
+        // === WEATHER ===
         function updateWeather() {
             if (!navigator.geolocation) return;
-            navigator.geolocation.getCurrentPosition(
-                pos => {
-                    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&current_weather=true`)
-                        .then(r => r.json())
-                        .then(d => {
-                            const code = d.current_weather.weathercode;
-                            const temp = Math.round(d.current_weather.temperature);
-                            els.weatherTemp.textContent = `${temp}°C`;
-                            let icon = 'fa-cloud', desc = 'Nuageux';
-                            if (code === 0) { icon = 'fa-sun'; desc = 'Ensoleillé'; }
-                            else if (code <= 3) { icon = 'fa-cloud-sun'; desc = 'Peu nuageux'; }
-                            else if (code <= 48) { icon = 'fa-smog'; desc = 'Brouillard'; }
-                            else if (code <= 67) { icon = 'fa-cloud-rain'; desc = 'Pluie'; }
-                            else if (code <= 77) { icon = 'fa-snowflake'; desc = 'Neige'; }
-                            else if (code <= 82) { icon = 'fa-cloud-showers-heavy'; desc = 'Averses'; }
-                            els.weatherIcon.className = `weather-icon fas ${icon}`;
-                            els.weatherDesc.textContent = desc;
-                        });
-                },
-                () => els.weatherDesc.textContent = 'GPS Off'
-            );
+            navigator.geolocation.getCurrentPosition(pos => {
+                fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&current_weather=true`)
+                    .then(r => r.json())
+                    .then(d => {
+                        const code = d.current_weather.weathercode;
+                        const temp = Math.round(d.current_weather.temperature);
+                        els.weatherTemp.textContent = `${temp}°C`;
+                        let icon = 'fa-cloud', desc = 'Nuageux';
+                        if (code === 0) { icon = 'fa-sun'; desc = 'Ensoleillé'; }
+                        else if (code <= 3) { icon = 'fa-cloud-sun'; desc = 'Éclaircies'; }
+                        else if (code <= 48) { icon = 'fa-smog'; desc = 'Brouillard'; }
+                        else if (code <= 67) { icon = 'fa-cloud-rain'; desc = 'Pluie'; }
+                        els.weatherIcon.className = `weather-icon fas ${icon}`;
+                        els.weatherDesc.textContent = desc;
+                    });
+            }, () => els.weatherDesc.textContent = 'GPS Off');
         }
         updateWeather();
 
-        // === GESTION DES LIENS ===
+        // === CALENDAR & EVENTS ===
+        function renderCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            
+            els.calendarTitle.textContent = new Date(year, month).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+            els.calendarGrid.innerHTML = '';
+            
+            const days = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+            days.forEach(d => els.calendarGrid.innerHTML += `<div class="calendar-day-name">${d}</div>`);
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const startDay = firstDay === 0 ? 6 : firstDay - 1;
+            
+            // Padding
+            for(let i=0; i<startDay; i++) els.calendarGrid.innerHTML += `<div class="calendar-day other-month"></div>`;
+
+            const daysInMonth = new Date(year, month+1, 0).getDate();
+            const today = new Date();
+            
+            for(let i=1; i<=daysInMonth; i++) {
+                const thisDate = new Date(year, month, i);
+                const key = formatDateKey(thisDate);
+                const isToday = i === today.getDate() && month === today.getMonth() && year === today.getFullYear();
+                const hasEvent = myEvents[key] && myEvents[key].length > 0;
+                const isSelected = key === selectedDateKey;
+                
+                els.calendarGrid.innerHTML += `
+                    <div class="calendar-day ${isToday ? 'today' : ''} ${hasEvent ? 'has-event' : ''} ${isSelected ? 'selected' : ''}" data-date="${key}">
+                        ${i}
+                    </div>
+                `;
+            }
+        }
+
+        function toggleEventPanel(show) {
+            if(show) els.eventPanel.classList.add('active');
+            else els.eventPanel.classList.remove('active');
+        }
+
+        function renderEvents() {
+            if (!selectedDateKey) return;
+            const events = myEvents[selectedDateKey] || [];
+            
+            // Update Title
+            const dateObj = new Date(selectedDateKey + 'T00:00:00');
+            els.eventPanelTitle.textContent = dateObj.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+
+            els.eventList.innerHTML = events.length ? '' : '<div style="color:var(--text-secondary); font-size:0.8rem; text-align:center; padding:5px;">Aucun événement.</div>';
+            
+            events.sort((a,b) => (a.time || '99:99').localeCompare(b.time || '99:99')).forEach((ev, idx) => {
+                els.eventList.innerHTML += `
+                    <div class="event-item">
+                        <div class="event-item-info">
+                            <span class="event-item-title">${ev.title}</span>
+                            <span class="event-item-time">${ev.time || ''} ${ev.desc ? '- ' + ev.desc : ''}</span>
+                        </div>
+                        <button class="action-btn delete" onclick="deleteEvent(${idx})"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+            });
+            
+            // Clear inputs
+            els.newEventTitle.value = '';
+            els.newEventTime.value = '';
+            els.newEventDesc.value = '';
+        }
+
+        // Event Listeners
+        $('calNext').addEventListener('click', () => { currentDate.setMonth(currentDate.getMonth()+1); renderCalendar(); });
+        $('calPrev').addEventListener('click', () => { currentDate.setMonth(currentDate.getMonth()-1); renderCalendar(); });
+        
+        els.calendarGrid.addEventListener('click', e => {
+            if(e.target.classList.contains('calendar-day') && e.target.dataset.date) {
+                const key = e.target.dataset.date;
+                // Toggle panel off if clicking same day
+                if (key === selectedDateKey && els.eventPanel.classList.contains('active')) {
+                    selectedDateKey = null;
+                    toggleEventPanel(false);
+                    renderCalendar(); // Deselect
+                } else {
+                    selectedDateKey = key;
+                    renderCalendar(); // Visual select
+                    renderEvents();
+                    toggleEventPanel(true);
+                }
+            }
+        });
+
+        $('saveEventBtn').addEventListener('click', () => {
+            const title = els.newEventTitle.value.trim();
+            if(!title || !selectedDateKey) return;
+
+            if(!myEvents[selectedDateKey]) myEvents[selectedDateKey] = [];
+            myEvents[selectedDateKey].push({
+                title: title,
+                time: els.newEventTime.value,
+                desc: els.newEventDesc.value.trim()
+            });
+            
+            localStorage.setItem('myEvents', JSON.stringify(myEvents));
+            renderEvents();
+            renderCalendar(); // Update dot
+        });
+        
+        window.deleteEvent = idx => {
+            myEvents[selectedDateKey].splice(idx, 1);
+            if(myEvents[selectedDateKey].length === 0) delete myEvents[selectedDateKey];
+            localStorage.setItem('myEvents', JSON.stringify(myEvents));
+            renderEvents();
+            renderCalendar();
+        };
+
+        // === SEARCH ===
+        // Load saved engine
+        const savedIcon = localStorage.getItem('currentEngineIcon');
+        const savedName = localStorage.getItem('currentEngineName');
+        if (savedIcon && savedName) {
+            els.engineIconDisplay.className = `engine-icon ${savedIcon}`;
+            els.engineNameDisplay.textContent = savedName;
+        }
+
+        els.engineSelector.addEventListener('click', e => {
+            e.stopPropagation();
+            els.engineDropdown.classList.toggle('active');
+        });
+        document.addEventListener('click', () => els.engineDropdown.classList.remove('active'));
+
+        document.querySelectorAll('.engine-option').forEach(opt => {
+            opt.addEventListener('click', e => {
+                e.stopPropagation();
+                currentEngine = opt.dataset.url;
+                localStorage.setItem('currentEngine', currentEngine);
+                localStorage.setItem('currentEngineIcon', opt.dataset.icon);
+                localStorage.setItem('currentEngineName', opt.querySelector('span').textContent);
+                els.engineIconDisplay.className = `engine-icon ${opt.dataset.icon}`;
+                els.engineNameDisplay.textContent = opt.querySelector('span').textContent;
+                els.engineDropdown.classList.remove('active');
+            });
+        });
+
+        els.searchForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const q = els.searchInput.value.trim();
+            if(q) window.location.href = currentEngine + encodeURIComponent(q);
+        });
+
+        // === LINKS ===
         function renderQuickLinks() {
             els.quickLinks.innerHTML = '';
-            myLinks.forEach(link => {
+            myLinks.forEach((link, i) => {
                 const a = document.createElement('a');
-                a.href = link.url;
-                a.className = 'quick-link';
-                a.target = '_blank';
-                a.innerHTML = `
-                    <div class="link-icon"><i class="${link.icon}"></i></div>
-                    <span class="link-name">${link.name}</span>
-                `;
+                a.href = link.url; a.className = 'quick-link'; a.target = '_blank';
+                a.style.animationDelay = `${i * 0.1}s`;
+                a.innerHTML = `<div class="link-icon"><i class="${link.icon}"></i></div><span class="link-name">${link.name}</span>`;
                 els.quickLinks.appendChild(a);
             });
             localStorage.setItem('myLinks', JSON.stringify(myLinks));
@@ -507,156 +692,93 @@
                 const div = document.createElement('div');
                 div.className = 'link-item-manager';
                 div.innerHTML = `
-                    <div class="link-info">
-                        <i class="${link.icon}"></i>
-                        <span>${link.name}</span>
-                    </div>
+                    <div class="link-info"><i class="${link.icon}"></i><span>${link.name}</span></div>
                     <div class="link-actions">
-                        <button class="action-btn" onclick="moveLink(${index}, -1)" title="Monter"><i class="fas fa-chevron-up"></i></button>
-                        <button class="action-btn" onclick="moveLink(${index}, 1)" title="Descendre"><i class="fas fa-chevron-down"></i></button>
-                        <button class="action-btn" onclick="editLink(${index})" title="Modifier"><i class="fas fa-pen"></i></button>
-                        <button class="action-btn delete" onclick="deleteLink(${index})" title="Supprimer"><i class="fas fa-trash"></i></button>
+                        <button class="action-btn" onclick="editLink(${index})"><i class="fas fa-pen"></i></button>
+                        <button class="action-btn delete" onclick="deleteLink(${index})"><i class="fas fa-trash"></i></button>
                     </div>
                 `;
                 els.linksListManager.appendChild(div);
             });
         }
 
-        window.moveLink = (index, direction) => {
-            if (direction === -1 && index > 0) {
-                [myLinks[index], myLinks[index - 1]] = [myLinks[index - 1], myLinks[index]];
-            } else if (direction === 1 && index < myLinks.length - 1) {
-                [myLinks[index], myLinks[index + 1]] = [myLinks[index + 1], myLinks[index]];
-            }
-            renderQuickLinks();
-            renderLinksManager();
-        };
-
-        window.deleteLink = (index) => {
+        window.deleteLink = index => {
             if(confirm('Supprimer ce lien ?')) {
                 myLinks.splice(index, 1);
-                renderQuickLinks();
-                renderLinksManager();
+                renderQuickLinks(); renderLinksManager();
             }
         };
 
-        window.editLink = (index) => {
+        window.editLink = index => {
             const link = myLinks[index];
             editingLinkId = index;
-            els.linkFormTitle.textContent = "Modifier le lien";
+            $('linkFormTitle').textContent = "Modifier le lien";
             els.linkNameInput.value = link.name;
             els.linkUrlInput.value = link.url;
             els.linkIconInput.value = link.icon;
-            closeModal('modalLinks');
+            closeModal('modalSettings');
             openModal('modalLinkForm');
         };
 
-        // === RECHERCHE ===
-        els.engineSelector.addEventListener('click', (e) => {
-            e.stopPropagation();
-            els.engineDropdown.classList.toggle('active');
-        });
-        document.addEventListener('click', () => els.engineDropdown.classList.remove('active'));
-
-        document.querySelectorAll('.engine-option').forEach(opt => {
-            opt.addEventListener('click', (e) => {
-                e.stopPropagation();
-                currentEngine = opt.dataset.url;
-                localStorage.setItem('currentEngine', currentEngine);
-                localStorage.setItem('currentEngineIcon', opt.dataset.icon);
-                localStorage.setItem('currentEngineName', opt.querySelector('span').textContent);
-                els.engineSelector.querySelector('.engine-icon').className = `engine-icon ${opt.dataset.icon}`;
-                els.engineSelector.querySelector('.engine-name').textContent = opt.querySelector('span').textContent;
-                els.engineDropdown.classList.remove('active');
-            });
-                // Appliquer le moteur de recherche sauvegardé au chargement
-                const savedEngineIcon = localStorage.getItem('currentEngineIcon');
-                const savedEngineName = localStorage.getItem('currentEngineName');
-                if (savedEngineIcon && savedEngineName) {
-                    els.engineSelector.querySelector('.engine-icon').className = `engine-icon ${savedEngineIcon}`;
-                    els.engineSelector.querySelector('.engine-name').textContent = savedEngineName;
-                }
-        });
-
-        els.searchForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const q = els.searchInput.value.trim();
-            if(q) window.location.href = currentEngine + encodeURIComponent(q);
-        });
-
-        // === GESTION DES MODALS ===
-        els.userNameDisplay.addEventListener('click', () => {
+        // === SETTINGS ===
+        els.userNameDisplay.addEventListener('click', () => { 
             els.nameInput.value = localStorage.getItem('userName') || '';
-            openModal('modalUser');
+            els.greetingInput.value = localStorage.getItem('customGreeting') || '';
+            renderLinksManager(); 
+            openModal('modalSettings'); 
         });
-
-        els.hamburgerBtn.addEventListener('click', () => {
+        $('hamburgerBtn').addEventListener('click', () => { 
             els.nameInput.value = localStorage.getItem('userName') || '';
-            openModal('modalUser');
+            els.greetingInput.value = localStorage.getItem('customGreeting') || '';
+            renderLinksManager(); 
+            openModal('modalSettings'); 
         });
-
-        document.getElementById('manageLinksBtn').addEventListener('click', () => {
-            closeModal('modalUser');
-            renderLinksManager();
-            openModal('modalLinks');
-        });
-
-        document.getElementById('addLinkBtn').addEventListener('click', () => {
+        
+        $('addLinkBtn').addEventListener('click', () => {
             editingLinkId = null;
-            els.linkFormTitle.textContent = "Ajouter un lien";
-            els.linkNameInput.value = '';
-            els.linkUrlInput.value = '';
-            els.linkIconInput.value = 'fas fa-star';
-            closeModal('modalLinks');
-            openModal('modalLinkForm');
+            $('linkFormTitle').textContent = "Ajouter un lien";
+            els.linkNameInput.value = ''; els.linkUrlInput.value = ''; els.linkIconInput.value = '';
+            closeModal('modalSettings'); openModal('modalLinkForm');
         });
 
-        document.querySelectorAll('.modal-close').forEach(btn => {
-            btn.addEventListener('click', () => closeModal(btn.dataset.target));
-        });
-        document.querySelectorAll('.modal-overlay').forEach(overlay => {
-            overlay.addEventListener('click', (e) => {
-                if(e.target === overlay) closeModal(overlay.id);
-            });
-        });
-
-        document.getElementById('saveNameBtn').addEventListener('click', () => {
-            const val = els.nameInput.value.trim();
-            val ? localStorage.setItem('userName', val) : localStorage.removeItem('userName');
-            updateTime();
-            closeModal('modalUser');
+        $('saveNameBtn').addEventListener('click', () => {
+            const name = els.nameInput.value.trim();
+            const greeting = els.greetingInput.value.trim();
+            
+            name ? localStorage.setItem('userName', name) : localStorage.removeItem('userName');
+            greeting ? localStorage.setItem('customGreeting', greeting) : localStorage.removeItem('customGreeting');
+            
+            updateTime(); // Update UI immediately
+            closeModal('modalSettings');
         });
 
-        document.getElementById('saveLinkBtn').addEventListener('click', () => {
+        $('saveLinkBtn').addEventListener('click', () => {
             const newLink = {
                 id: Date.now(),
-                name: els.linkNameInput.value.trim() || 'Sans nom',
+                name: els.linkNameInput.value.trim() || 'Lien',
                 url: els.linkUrlInput.value.trim() || '#',
                 icon: els.linkIconInput.value.trim() || 'fas fa-link'
             };
-            if (editingLinkId !== null) {
-                myLinks[editingLinkId] = { ...newLink, id: myLinks[editingLinkId].id };
-            } else {
-                myLinks.push(newLink);
-            }
+            if (editingLinkId !== null) myLinks[editingLinkId] = { ...newLink, id: myLinks[editingLinkId].id };
+            else myLinks.push(newLink);
             renderQuickLinks();
             closeModal('modalLinkForm');
-            openModal('modalLinks');
             renderLinksManager();
+            openModal('modalSettings');
         });
 
+        // Modal Close
+        document.querySelectorAll('.modal-close').forEach(btn => {
+            btn.addEventListener('click', () => closeModal(btn.dataset.target));
+        });
+        document.querySelectorAll('.modal-overlay').forEach(ov => {
+            ov.addEventListener('click', e => { if(e.target === ov) closeModal(ov.id); });
+        });
+
+        // Init
+        renderCalendar();
         renderQuickLinks();
 
-        // === SÉCURITÉ ===
-        document.addEventListener('contextmenu', e => e.preventDefault());
-        document.addEventListener('keydown', e => {
-            if (e.key === 'F12' || 
-                (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'i') ||
-                (e.ctrlKey && e.key.toLowerCase() === 'u') ||
-                (e.ctrlKey && e.key.toLowerCase() === 'a')) {
-                e.preventDefault();
-            }
-        });
     </script>
 </body>
 </html>
