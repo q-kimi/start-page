@@ -67,7 +67,11 @@
             padding: 15px 20px;
             border: 1px solid rgba(255, 255, 255, 0.05);
             transition: var(--transition);
-            width: 320px; /* Fixed width for stability */
+        }
+        .weather-widget.widget-card {
+            width: 210px;
+            min-width: 180px;
+            max-width: 240px;
         }
 
         .weather-widget {
@@ -351,13 +355,15 @@
         </div>
 
         <div class="header-right">
-            <div class="clock-widget">
-                <div class="clock-time" id="clockTime">00:00</div>
-                <div class="clock-date" id="clockDate">...</div>
+            <div style="display: flex; align-items: flex-start; gap: 12px;">
+                <div class="clock-widget">
+                    <div class="clock-time" id="clockTime">00:00</div>
+                    <div class="clock-date" id="clockDate">...</div>
+                </div>
+                <button class="hamburger-btn" id="hamburgerBtn" aria-label="Menu" style="margin-left:8px; align-self: flex-start;">
+                    <i class="fas fa-cog"></i>
+                </button>
             </div>
-            <button class="hamburger-btn" id="hamburgerBtn" aria-label="Menu">
-                <i class="fas fa-cog"></i>
-            </button>
         </div>
     </header>
 
@@ -512,13 +518,41 @@
                     .then(r => r.json())
                     .then(d => {
                         const code = d.current_weather.weathercode;
-                        const temp = Math.round(d.current_weather.temperature);
-                        els.weatherTemp.textContent = `${temp}°C`;
-                        let icon = 'fa-cloud', desc = 'Nuageux';
-                        if (code === 0) { icon = 'fa-sun'; desc = 'Ensoleillé'; }
-                        else if (code <= 3) { icon = 'fa-cloud-sun'; desc = 'Éclaircies'; }
-                        else if (code <= 48) { icon = 'fa-smog'; desc = 'Brouillard'; }
-                        else if (code <= 67) { icon = 'fa-cloud-rain'; desc = 'Pluie'; }
+                        const temp = d.current_weather.temperature;
+                        const tempStr = temp < 10 ? `${temp.toFixed(1)}°C` : `${Math.round(temp)}°C`;
+                        let desc = '', icon = 'fa-cloud';
+                        // Mapping exhaustif Open-Meteo
+                        switch (code) {
+                            case 0: icon = 'fa-sun'; desc = 'Ciel clair'; break;
+                            case 1: icon = 'fa-cloud-sun'; desc = 'Principalement clair'; break;
+                            case 2: icon = 'fa-cloud'; desc = 'Partiellement nuageux'; break;
+                            case 3: icon = 'fa-cloud'; desc = 'Couvert'; break;
+                            case 45: case 48: icon = 'fa-smog'; desc = 'Brouillard'; break;
+                            case 51: icon = 'fa-cloud-rain'; desc = 'Bruine légère'; break;
+                            case 53: icon = 'fa-cloud-rain'; desc = 'Bruine modérée'; break;
+                            case 55: icon = 'fa-cloud-rain'; desc = 'Bruine dense'; break;
+                            case 56: icon = 'fa-cloud-rain'; desc = 'Bruine verglaçante légère'; break;
+                            case 57: icon = 'fa-cloud-rain'; desc = 'Bruine verglaçante dense'; break;
+                            case 61: icon = 'fa-cloud-showers-heavy'; desc = 'Pluie faible'; break;
+                            case 63: icon = 'fa-cloud-showers-heavy'; desc = 'Pluie modérée'; break;
+                            case 65: icon = 'fa-cloud-showers-heavy'; desc = 'Pluie forte'; break;
+                            case 66: icon = 'fa-cloud-showers-heavy'; desc = 'Pluie verglaçante légère'; break;
+                            case 67: icon = 'fa-cloud-showers-heavy'; desc = 'Pluie verglaçante forte'; break;
+                            case 71: icon = 'fa-snowflake'; desc = 'Chute de neige faible'; break;
+                            case 73: icon = 'fa-snowflake'; desc = 'Chute de neige modérée'; break;
+                            case 75: icon = 'fa-snowflake'; desc = 'Chute de neige forte'; break;
+                            case 77: icon = 'fa-snowflake'; desc = 'Grains de neige'; break;
+                            case 80: icon = 'fa-cloud-showers-heavy'; desc = 'Averses faibles'; break;
+                            case 81: icon = 'fa-cloud-showers-heavy'; desc = 'Averses modérées'; break;
+                            case 82: icon = 'fa-cloud-showers-heavy'; desc = 'Averses violentes'; break;
+                            case 85: icon = 'fa-snowflake'; desc = 'Averses de neige faibles'; break;
+                            case 86: icon = 'fa-snowflake'; desc = 'Averses de neige fortes'; break;
+                            case 95: icon = 'fa-bolt'; desc = 'Orage'; break;
+                            case 96: icon = 'fa-bolt'; desc = 'Orage avec grêle légère'; break;
+                            case 99: icon = 'fa-bolt'; desc = 'Orage avec grêle forte'; break;
+                            default: desc = 'Indéterminé';
+                        }
+                        els.weatherTemp.textContent = tempStr;
                         els.weatherIcon.className = `weather-icon fas ${icon}`;
                         els.weatherDesc.textContent = desc;
                     });
