@@ -189,7 +189,17 @@
 
         .greeting-container { text-align: center; margin-bottom: 40px; animation: fadeIn 1s ease-out; }
         .greeting-text { font-size: 2rem; font-weight: 300; }
-        .user-name { font-weight: 500; color: var(--accent-color); cursor: pointer; transition: var(--transition); }
+        .user-name {
+            font-weight: 500;
+            color: var(--accent-color);
+            cursor: pointer;
+            transition: var(--transition);
+            font-style: italic;
+            font-family: 'Playfair Display', 'Georgia', 'Times New Roman', Times, serif;
+            letter-spacing: 0.5px;
+            font-size: calc(2rem + 5px);
+        }
+            @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500;1,600&display=swap');
         .user-name:hover { opacity: 0.8; }
 
         /* Search */
@@ -415,10 +425,10 @@
             </div>
             
             <label style="font-size:0.85rem; color:var(--text-secondary); display:block; margin-bottom:5px;">Texte d'accueil (ex: Bonjour, Hello)</label>
-            <input type="text" class="modal-input" id="greetingInput" placeholder="Laisser vide pour auto (Bonjour/Soir)">
+            <input type="text" class="modal-input" id="greetingInput" placeholder="Laisser vide pour automatique">
             
             <label style="font-size:0.85rem; color:var(--text-secondary); display:block; margin-bottom:5px;">Votre prénom</label>
-            <input type="text" class="modal-input" id="nameInput" placeholder="Ex: Alexandre">
+            <input type="text" class="modal-input" id="nameInput" placeholder="Ex: Dune">
             <button class="btn-primary" id="saveNameBtn" style="margin-bottom:20px;">Sauvegarder le profil</button>
             
             <div style="border-top:1px solid rgba(255,255,255,0.1); margin:20px 0; padding-top:5px;"></div>
