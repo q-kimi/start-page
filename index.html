@@ -1,6 +1,39 @@
+        <!-- ...existing code... -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+        <style>
+            :root {
+                --bg-gradient-start: #1f1f2e;
+                --bg-gradient-end: #0f0f12;
+                --bg-main: #0f0f12;
+                --surface-color: #1e1e24;
+                --surface-hover: #2a2a35;
+                --text-primary: #ffffff;
+                --text-secondary: #a1a1aa;
+                --accent-color: #6366f1;
+                --accent-hover: #818cf8;
+                --danger-color: #ef4444;
+                --border-radius: 16px;
+                --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
+            body {
+                font-family: 'Inter', sans-serif;
+                background: radial-gradient(circle at 50% 0%, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 70%);
+                background-color: var(--bg-main);
+                color: var(--text-primary);
+                height: 100vh;
+                overflow: hidden;
+                user-select: none;
+            }
+            /* ...existing code... */
+            /* Fix couleur du logo horloge dans input[type="time"] pour fond sombre */
+            input[type="time"].widget-input::-webkit-calendar-picker-indicator {
+                filter: invert(1) brightness(2);
+            }
+        </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
