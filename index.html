@@ -222,18 +222,22 @@
 
         .greeting-container { text-align: center; margin-bottom: 40px; animation: fadeIn 1s ease-out; }
         .greeting-text { font-size: 2rem; font-weight: 300; }
+
+
         .user-name {
             font-weight: 500;
             color: var(--accent-color);
             cursor: pointer;
             transition: var(--transition);
-            font-style: italic;
             font-family: 'Playfair Display', 'Georgia', 'Times New Roman', Times, serif;
             letter-spacing: 0.5px;
             font-size: calc(2rem + 5px);
             text-decoration: none;
         }
-            @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500;1,600&display=swap');
+        .user-name--active {
+            /* No italics */
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500;1,600&display=swap');
         .user-name:hover { opacity: 0.8; }
 
         /* Search */
@@ -535,9 +539,16 @@
             const now = new Date();
             els.clockTime.textContent = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
             els.clockDate.textContent = now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
-            
-            // Load user name
-            els.userNameDisplay.textContent = localStorage.getItem('userName') || '{User}';
+
+            // Load user name and toggle italics only if set
+            const userName = localStorage.getItem('userName');
+            if (userName && userName !== '{User}') {
+                els.userNameDisplay.textContent = userName;
+                els.userNameDisplay.classList.add('user-name--active');
+            } else {
+                els.userNameDisplay.textContent = '{User}';
+                els.userNameDisplay.classList.remove('user-name--active');
+            }
 
             // Load Custom Greeting or Default
             const customGreeting = localStorage.getItem('customGreeting');
