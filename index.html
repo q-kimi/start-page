@@ -1,7 +1,11 @@
-        <!-- ...existing code... -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <!-- Favicon et icônes -->
+    <link rel="icon" type="image/svg+xml" href="icons/icon48.svg">
+    <link rel="icon" sizes="16x16" href="icons/icon16.svg" type="image/svg+xml">
+    <link rel="icon" sizes="48x48" href="icons/icon48.svg" type="image/svg+xml">
+    <link rel="icon" sizes="128x128" href="icons/icon128.svg" type="image/svg+xml">
         <style>
             :root {
                 --bg-gradient-start: #1f1f2e;
@@ -28,8 +32,6 @@
                 overflow: hidden;
                 user-select: none;
             }
-            /* ...existing code... */
-            /* Fix couleur du logo horloge dans input[type="time"] pour fond sombre */
             input[type="time"].widget-input::-webkit-calendar-picker-indicator {
                 filter: invert(1) brightness(2);
             }

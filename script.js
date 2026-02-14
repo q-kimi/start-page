@@ -1,4 +1,6 @@
-// Constantes et icônes SVG
+// =========================
+// 1. ICONES SVG ET DONNÉES
+// =========================
 const ICONS = {
     mail: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>',
     github: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>',
@@ -17,32 +19,39 @@ const DEFAULT_SHORTCUTS = [
     { name: 'Twitter', url: 'https://twitter.com', icon: 'twitter' }
 ];
 
-// État de l'application
+// =========================
+// 2. ETAT GLOBAL
+// =========================
 let settings = {
-    name: 'Anthony',
+    name: 'User', // Valeur par défaut, peut être modifiée par l'utilisateur
     city: 'Paris',
-    shortcuts: DEFAULT_SHORTCUTS
+    shortcuts: [...DEFAULT_SHORTCUTS]
 };
 
-// Éléments DOM
-const timeElement = document.getElementById('time');
-const dateElement = document.getElementById('date');
-const greetingElement = document.getElementById('greeting');
-const weatherTempElement = document.getElementById('weather-temp');
-const weatherDescElement = document.getElementById('weather-desc');
-const searchForm = document.getElementById('search-form');
-const searchInput = document.getElementById('search-input');
-const shortcutsContainer = document.getElementById('shortcuts');
-const settingsBtn = document.getElementById('settings-btn');
-const settingsModal = document.getElementById('settings-modal');
-const closeModal = document.getElementById('close-modal');
-const nameInput = document.getElementById('name-input');
-const cityInput = document.getElementById('city-input');
-const saveSettings = document.getElementById('save-settings');
-const addShortcutBtn = document.getElementById('add-shortcut');
-const shortcutsManager = document.getElementById('shortcuts-manager');
+// =========================
+// 3. SÉLECTEURS DOM
+// =========================
+const $ = id => document.getElementById(id);
+const timeElement = $("time");
+const dateElement = $("date");
+const greetingElement = $("greeting");
+const weatherTempElement = $("weather-temp");
+const weatherDescElement = $("weather-desc");
+const searchForm = $("search-form");
+const searchInput = $("search-input");
+const shortcutsContainer = $("shortcuts");
+const settingsBtn = $("settings-btn");
+const settingsModal = $("settings-modal");
+const closeModalBtn = $("close-modal");
+const nameInput = $("name-input");
+const cityInput = $("city-input");
+const saveSettings = $("save-settings");
+const addShortcutBtn = $("add-shortcut");
+const shortcutsManager = $("shortcuts-manager");
 
-// Initialisation
+// =========================
+// 4. INITIALISATION
+// =========================
 document.addEventListener('DOMContentLoaded', () => {
     loadSettings();
     updateTime();
@@ -50,144 +59,111 @@ document.addEventListener('DOMContentLoaded', () => {
     updateGreeting();
     updateWeather();
     renderShortcuts();
-    
-    // Mise à jour de l'horloge chaque seconde
-    setInterval(updateTime, 1000);
-    
-    // Mise à jour de la météo toutes les 30 minutes
-    setInterval(updateWeather, 1800000);
-    
-    // Événements
+
+    setInterval(updateTime, 1000); // Horloge
+    setInterval(updateWeather, 1800000); // Météo
+
+    // Événements UI
     searchForm.addEventListener('submit', handleSearch);
     settingsBtn.addEventListener('click', openSettings);
-    closeModal.addEventListener('click', closeSettingsModal);
+    closeModalBtn.addEventListener('click', closeSettingsModal);
     saveSettings.addEventListener('click', handleSaveSettings);
     addShortcutBtn.addEventListener('click', addShortcutField);
-    
-    // Fermer le modal en cliquant à l'extérieur
     settingsModal.addEventListener('click', (e) => {
-        if (e.target === settingsModal) {
-            closeSettingsModal();
-        }
+        if (e.target === settingsModal) closeSettingsModal();
     });
 });
 
-// Gestion du temps
+// =========================
+// 5. HORLOGE & DATE
+// =========================
 function updateTime() {
     const now = new Date();
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    timeElement.textContent = `${hours}:${minutes}`;
+    timeElement.textContent = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
 }
-
 function updateDate() {
     const now = new Date();
-    const options = { weekday: 'long', day: 'numeric', month: 'long' };
-    const dateStr = now.toLocaleDateString('fr-FR', options);
-    dateElement.textContent = dateStr;
+    dateElement.textContent = now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
 }
 
-// Message de salutation
+// =========================
+// 6. SALUTATION
+// =========================
 function updateGreeting() {
     const hour = new Date().getHours();
-    let greeting = 'Bonjour';
-    
-    if (hour < 12) {
-        greeting = 'Bonjour';
-    } else if (hour < 18) {
-        greeting = 'Bon après-midi';
-    } else {
-        greeting = 'Bonsoir';
-    }
-    
-    if (settings.name) {
-        greetingElement.innerHTML = `${greeting}, <span class="name">${settings.name}</span>`;
-    } else {
-        greetingElement.textContent = greeting;
-    }
+    let greeting = hour < 12 ? 'Bonjour' : hour < 18 ? 'Bon après-midi' : 'Bonsoir';
+    greetingElement.innerHTML = settings.name ? `${greeting}, <span class="name">${settings.name}</span>` : greeting;
 }
 
 
-// Météo
+// =========================
+// 7. MÉTÉO (simulation)
+// =========================
 async function updateWeather() {
     try {
-        // Simulation météo (en production, utilisez une vraie API comme OpenWeatherMap)
+        // Simulation météo (remplacer par une vraie API si besoin)
         const weatherConditions = ['Ensoleillé', 'Nuageux', 'Couvert', 'Pluvieux'];
-        const temp = Math.floor(Math.random() * 20) + 5; // 5-25°C
+        const temp = Math.floor(Math.random() * 20) + 5;
         const condition = weatherConditions[Math.floor(Math.random() * weatherConditions.length)];
-        
         weatherTempElement.textContent = `${temp}°C`;
         weatherDescElement.textContent = condition;
-        
-        // Vous pouvez utiliser cette fonction avec une vraie API :
-        // const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${settings.city}&units=metric&lang=fr&appid=YOUR_API_KEY`);
-        // const data = await response.json();
-        // weatherTempElement.textContent = `${Math.round(data.main.temp)}°C`;
-        // weatherDescElement.textContent = data.weather[0].description;
     } catch (error) {
-        console.error('Erreur lors de la récupération de la météo:', error);
+        console.error('Erreur météo:', error);
         weatherTempElement.textContent = '--°C';
         weatherDescElement.textContent = 'Non disponible';
     }
 }
 
-// Recherche
+// =========================
+// 8. RECHERCHE
+// =========================
 function handleSearch(e) {
     e.preventDefault();
     const query = searchInput.value.trim();
-    
     if (!query) return;
-    
-    // Vérifier si c'est une URL
     const urlPattern = /^(https?:\/\/)?([\w-]+(\.[\w-]+)+)(\/.*)?$/;
-    
     if (urlPattern.test(query)) {
-        // Ajouter https:// si nécessaire
         const url = query.startsWith('http') ? query : `https://${query}`;
         window.location.href = url;
     } else {
-        // Recherche Google
         window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
     }
 }
 
-// Raccourcis
+// =========================
+// 9. RACCOURCIS (affichage)
+// =========================
 function renderShortcuts() {
     shortcutsContainer.innerHTML = '';
-    
     settings.shortcuts.forEach(shortcut => {
         const link = document.createElement('a');
         link.href = shortcut.url;
         link.className = 'shortcut';
         link.target = '_blank';
         link.rel = 'noopener noreferrer';
-        
         const iconSvg = ICONS[shortcut.icon] || ICONS.globe;
-        
         link.innerHTML = `
             <div class="shortcut-icon">${iconSvg}</div>
             <div class="shortcut-name">${shortcut.name}</div>
         `;
-        
         shortcutsContainer.appendChild(link);
     });
 }
 
-// Paramètres
+// =========================
+// 10. PARAMÈTRES & MODAL
+// =========================
 function openSettings() {
     settingsModal.classList.add('active');
     nameInput.value = settings.name;
     cityInput.value = settings.city;
     renderShortcutsManager();
 }
-
 function closeSettingsModal() {
     settingsModal.classList.remove('active');
 }
-
 function renderShortcutsManager() {
     shortcutsManager.innerHTML = '';
-    
     settings.shortcuts.forEach((shortcut, index) => {
         const div = document.createElement('div');
         div.className = 'shortcut-edit';
@@ -199,12 +175,10 @@ function renderShortcutsManager() {
         `;
         shortcutsManager.appendChild(div);
     });
-    
-    // Événements pour les inputs et boutons de suppression
+    // Events
     shortcutsManager.querySelectorAll('input').forEach(input => {
         input.addEventListener('change', updateShortcutField);
     });
-    
     shortcutsManager.querySelectorAll('.delete-shortcut').forEach(btn => {
         btn.addEventListener('click', deleteShortcut);
     });
@@ -215,57 +189,46 @@ function updateShortcutField(e) {
     const field = e.target.dataset.field;
     settings.shortcuts[index][field] = e.target.value;
 }
-
 function deleteShortcut(e) {
     const index = parseInt(e.target.dataset.index);
     settings.shortcuts.splice(index, 1);
     renderShortcutsManager();
 }
-
 function addShortcutField() {
     settings.shortcuts.push({ name: 'Nouveau', url: 'https://exemple.com', icon: 'globe' });
     renderShortcutsManager();
 }
-
 function handleSaveSettings() {
     settings.name = nameInput.value;
     settings.city = cityInput.value;
-    
     saveSettings_toStorage();
     applySettings();
     closeSettingsModal();
 }
 
-// Stockage
+// =========================
+// 11. STOCKAGE LOCAL
+// =========================
 function loadSettings() {
     try {
         const stored = localStorage.getItem('startPageSettings');
-        if (stored) {
-            const parsed = JSON.parse(stored);
-            settings = { ...settings, ...parsed };
-        }
+        if (stored) settings = { ...settings, ...JSON.parse(stored) };
     } catch (error) {
-        console.error('Erreur lors du chargement des paramètres:', error);
+        console.error('Erreur chargement paramètres:', error);
     }
-    
     applySettings();
 }
-
 function saveSettings_toStorage() {
     try {
         localStorage.setItem('startPageSettings', JSON.stringify(settings));
     } catch (error) {
-        console.error('Erreur lors de la sauvegarde des paramètres:', error);
+        console.error('Erreur sauvegarde paramètres:', error);
     }
 }
-
 function applySettings() {
-    // Mettre à jour le message de salutation
     updateGreeting();
     updateDate();
     updateWeather();
-    
-    // Rafraîchir les raccourcis
     renderShortcuts();
 }
 
